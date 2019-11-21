@@ -2,10 +2,9 @@ class LayerPopup{
     constructor(options, callback){
         this.options = Object.assign({}, {
             // default 옵션   
-            
             appendPosition : 'body', // id나 class값 가능
             className : 'popup', // 같은게 있으면 data-popup-id 값을 조정하자
-            title : '타이틀',
+            title : '알림',
             content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.', // 메세지나 객체 삽입
             dim : true, // true or false 
             
@@ -30,9 +29,8 @@ class LayerPopup{
             // -- 버튼 
             /// 
         }, options);
-    
-        this.callback = callback;
-
+        
+        this.callback = callback || '';
         this.init();
     }
 
@@ -54,7 +52,7 @@ class LayerPopup{
         this.container = createElement({className : className + '_container'});
         this.footer = createElement({className : className + '_footer'});
         this.title = createElement({tag : 'p', className : 'title'});
-        this.text = createElement({tag : 'p', className : 'text'});
+        this.content = createElement({tag : 'p', className : 'content'});
 
         // btn
         if(custom){
@@ -62,15 +60,15 @@ class LayerPopup{
             console.log('custom true, button');
 
         }else{
-            const done = createElement({tag : 'button', className : 'done', label : '확인'});
-            const cancel = createElement({tag : 'button', className : 'cancel', label : '취소'});
+            this.done = createElement({tag : 'button', className : 'done', label : '확인'});
+            this.cancel = createElement({tag : 'button', className : 'cancel', label : '취소'});
 
-            this.buttons = [done, cancel];
+            this.buttons = [this.done, this.cancel];
         }
 
         this.append(); 
 
-        function createElement({ tag = 'div', type, className, label }){
+        function createElement({ tag = 'div', type = 'button', className, label }){
             const el = document.createElement(tag);
 
             if(className){
@@ -78,11 +76,7 @@ class LayerPopup{
             }
             
             if(tag === 'button'){
-                if(type){
-
-                }else{
-                    el.setAttribute('type', 'button');
-                }
+                el.setAttribute('type', type);
             }
 
             if(label){
@@ -97,7 +91,7 @@ class LayerPopup{
         console.log('append');
         const { appendPosition } = this.options;
 
-        this.container.append(this.text);
+        this.container.append(this.content);
         this.header.append(this.title);
 
         if(this.buttons.length > 1){
@@ -107,6 +101,7 @@ class LayerPopup{
         this.wrap.append(this.header, this.container, this.footer);
         
         this.setContent();
+        this.attachEvent();
 
         document.querySelector(appendPosition).append(this.wrap);
     }
@@ -114,46 +109,73 @@ class LayerPopup{
     setContent(){
         console.log('setContent');
         const { title, content } = this.options;
+        const outputContent = (typeof content === 'string') ? wordBreak(content, '\n', '<br>') 
+                                                            : content;
 
-        // \n 처리
+        this.title.innerText = title;
+        this.content.innerHTML = outputContent;
 
-
-
-
-        
-        // output = wordBreak(data, '\n', '<br>');
-        
-        /**
-         * 메세지 줄 바꿈 
-         * @param {String} text 수정할 메세지
-         * @param {String} org 수정되어야 할 문자열 (\n)
-         * @param {String} dest 수정되는 문자열 (<br>)
-         */
+        // \n ===> <br>
         function wordBreak(text, org, dest){
             return text.split(org).join(dest);
         }
-
-
     }
-
-
-    setStyle(){
-
-    }
-
     
 
     attachEvent(){
         console.log('attach');
+        const { custom } = this.options;
+        const that = this;
+
+        if(custom){
+
+        }else{
+
+            this.buttons.map(el => {
+                el.addEventListener('click', function(){
+                    that.defaultEvent(el);
+                });
+            });
+        }
+        setTimeout(() => {
+            this.dettachEvent();
+        }, 3000);
+
+
+    }
+
+    defaultEvent(el){
+        console.log('click');
+        let state = (el.classList.value === 'done') ? true : false;
+
+        if(this.callback !== ''){
+            this.callback(state);
+        } 
+
+        this.close();
     }
 
     dettachEvent(){
+        const that = this;
         console.log('dettach');
+        this.buttons.map(el => {
+            // console.log(el);
+            el.removeEventListener('click', that.defaultEvent, true);
+        });
     }
 
     open(){
         console.log('open');
 
+    }
+
+    close(){
+        console.log('close');
+
+    }
+
+    remove(){
+        console.log('remove');
     }
 
 

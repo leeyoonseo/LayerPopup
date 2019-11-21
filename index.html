@@ -13,7 +13,11 @@
 <script src="./assets/js/layerPopup.js"></script>
 <script>
     var openPopup = document.querySelector('.openPopup');
-    var popup = new LayerPopup();
+    var popup = new LayerPopup({
+
+    }, function(res){
+        console.log('res',res);
+    });
 
     openPopup.addEventListener('click', popup.open());
 

@@ -47,7 +47,7 @@ class LayerPopup{
 
         // class가 같은 팝업 처리
         // const popup = document.querySelector('.' + className + '_wrap');
-        this.dim = document.querySelector('.' + className + '_dim');
+        this.dim = document.querySelector('[data-type="dim"');
         
         if(this.dim){
             this.same = true;
@@ -81,7 +81,8 @@ class LayerPopup{
 
         // 옵션
         if(dim && !this.dim) {
-            this.dim = createElement({className : className + '_dim,layer_dim' });
+            this.dim = createElement({className : className + '_dim' });
+            this.dim.dataset.type = 'dim'
         }
 
         if(title !== ''){
@@ -121,11 +122,12 @@ class LayerPopup{
 
             if(className){
                 className = className.split(',');
-                console.log(className.length);
                 if(className.length > 1){
                     className.map((k) =>  el.classList.add(k));
+
                 }else{
                     el.classList.add(className);
+
                 }
             }
             

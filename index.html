@@ -5,23 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>layer Popup</title>
+    <link rel="stylesheet" type="text/css" href="./assets/css/layerPopup.css">
+<style>
+    .open{
+        padding:10px 20px;
+        font-size:18px;
+        border:1px solid #333;
+        border-radius:4px;
+        background:#fff;
+        cursor:pointer;
+    }
+
+    .open:hover{
+        background:rgba(0, 0, 0, 0.05);
+    }
+</style>
 </head>
-<body>
-    <button class="openPopup">
-        팝업 열기
+<body id="index">
+    <button id="open" class="open">
+        팝업 열기1
+    </button>
+    <button id="open2" class="open">
+        팝업 열기2
     </button>
 <script src="./assets/js/layerPopup.js"></script>
 <script>
-    var openPopup = document.querySelector('.openPopup');
-    var popup = new LayerPopup({
-
-    }, function(res){
-        console.log('res',res);
+    var open = document.querySelector('#open');
+    var open2 = document.querySelector('#open2');
+    var popup = new LayerPopup();
+    var popup2 = new LayerPopup({
+        title : '알림',
+        dim : false
     });
 
-    openPopup.addEventListener('click', popup.open());
+    open.addEventListener('click', () => {
+        popup.open();
+    });
 
-
+    open2.addEventListener('click', () => {
+        popup2.open();
+    });
 </script>
 </body>
 </html>

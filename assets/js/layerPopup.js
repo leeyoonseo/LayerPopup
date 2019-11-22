@@ -1,10 +1,13 @@
 class LayerPopup{
     constructor(options, callback){
+        this.name = "LayerPopup";
+
         this.options = Object.assign({}, {
             // default 옵션   
             appendPosition : 'body', // id나 class값 가능
-            className : 'popup', // 같은게 있으면 data-popup-id 값을 조정하자
-            title : '알림',
+            className : 'popup', 
+            
+            title : '',
             content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.', // 메세지나 객체 삽입
             dim : true, // true or false 
             
@@ -13,9 +16,10 @@ class LayerPopup{
             // -- 몇 일
             expired : true,
             expiryDate : 30,
-            // expiryDate : [30, 1], 2개까지 가능?
+            // expiryDate : [30, 1], 
+            //2개까지 가능?
 
-            custom : false, // true 일때
+            customButton : false, // true 일때
             button : [
                 {
                     type : '',
@@ -34,49 +38,100 @@ class LayerPopup{
         this.init();
     }
 
+
     // z-index도 1씩 증가해야 할 듯
 
     init(){
         console.log('init'); 
-        this.create();
+        const { className } = this.options;
 
+        // class가 같은 팝업 처리
+        // const popup = document.querySelector('.' + className + '_wrap');
+        this.dim = document.querySelector('.' + className + '_dim');
+        
+        if(this.dim){
+            this.same = true;
+        }
+
+        this.create();
     }
 
     create(){
         console.log('create');
-        const { className, custom } = this.options;
-       
-        this.dim = createElement({className : className + '_dim'});
+        const { className, customButton, title, dim, expired, expiryDate } = this.options;
+
+        // 기본
         this.wrap = createElement({className : className + '_wrap'});
         this.header = createElement({className : className + '_header'});
         this.container = createElement({className : className + '_container'});
         this.footer = createElement({className : className + '_footer'});
-        this.title = createElement({tag : 'p', className : 'title'});
         this.content = createElement({tag : 'p', className : 'content'});
 
-        // btn
-        if(custom){
+        // 버튼
+        if(customButton){
             const { button } = this.options;
-            console.log('custom true, button');
+            console.log('customButton true, button');
 
         }else{
-            this.done = createElement({tag : 'button', className : 'done', label : '확인'});
-            this.cancel = createElement({tag : 'button', className : 'cancel', label : '취소'});
+            this.done = createElement.call(this, {tag : 'button', className : 'done', label : '확인'});
+            this.cancel = createElement.call(this, {tag : 'button', className : 'cancel', label : '취소'});
 
             this.buttons = [this.done, this.cancel];
         }
 
+        // 옵션
+        if(dim && !this.dim) {
+            this.dim = createElement({className : className + '_dim,layer_dim' });
+        }
+
+        if(title !== ''){
+            this.title = createElement({tag : 'p', className : 'title'});
+        }
+
+        // 만료 설정
+        if(expired){
+            console.log('expiryDate',expiryDate);
+            if(Array.isArray(expiryDate)){
+                console.log('여러개');
+
+            }else{
+                console.log('한개');
+
+            }
+
+            // this.expireEls = [];
+        }
+
         this.append(); 
 
-        function createElement({ tag = 'div', type = 'button', className, label }){
+
+        /**
+         * 돔 생성
+         * @param {Object} 
+         * @param tag 생성할 태그네임
+         * @param className 추가할 클래스 명(복수일 경우 쉼표로 구분)
+         * @param type 버튼 타입 (버튼일 경우 사용)
+         * @param label 버튼 명 (버튼 일 경우 사용)
+         * @usage
+         *      title = createElement({ tag : 'p', className : 'title,title-red,title-required' });
+         *      button = createElement({ tag : 'button', className : 'cancel', type : 'button', label : '취소버튼' });
+         */
+        function createElement({ tag = 'div', className, type = 'button', label }){
             const el = document.createElement(tag);
 
             if(className){
-                el.classList.add(className);
+                className = className.split(',');
+                console.log(className.length);
+                if(className.length > 1){
+                    className.map((k) =>  el.classList.add(k));
+                }else{
+                    el.classList.add(className);
+                }
             }
             
             if(tag === 'button'){
                 el.setAttribute('type', type);
+                el.LayerPopup = this;
             }
 
             if(label){
@@ -89,10 +144,13 @@ class LayerPopup{
 
     append(){
         console.log('append');
-        const { appendPosition } = this.options;
+        const { appendPosition, title } = this.options;
 
         this.container.append(this.content);
-        this.header.append(this.title);
+
+        if(title !== '') {
+            this.header.append(this.title);
+        }
 
         if(this.buttons.length > 1){
             this.buttons.map(el => this.footer.append(el));
@@ -101,9 +159,11 @@ class LayerPopup{
         this.wrap.append(this.header, this.container, this.footer);
         
         this.setContent();
+        // this.bindEvents(true);
+
         this.attachEvent();
 
-        document.querySelector(appendPosition).append(this.wrap);
+        document.querySelector(appendPosition).append(this.wrap, this.dim);
     }
 
     setContent(){
@@ -112,70 +172,74 @@ class LayerPopup{
         const outputContent = (typeof content === 'string') ? wordBreak(content, '\n', '<br>') 
                                                             : content;
 
-        this.title.innerText = title;
+        if(title !== '') {
+            this.title.innerText = title;
+        }
         this.content.innerHTML = outputContent;
 
-        // \n ===> <br>
+        // \n -> <br>
         function wordBreak(text, org, dest){
             return text.split(org).join(dest);
         }
     }
-    
 
     attachEvent(){
-        console.log('attach');
-        const { custom } = this.options;
+        console.log('attachEvent');
         const that = this;
 
-        if(custom){
-
-        }else{
-
-            this.buttons.map(el => {
-                el.addEventListener('click', function(){
-                    that.defaultEvent(el);
-                });
-            });
-        }
-        setTimeout(() => {
-            this.dettachEvent();
-        }, 3000);
-
-
-    }
-
-    defaultEvent(el){
-        console.log('click');
-        let state = (el.classList.value === 'done') ? true : false;
-
-        if(this.callback !== ''){
-            this.callback(state);
-        } 
-
-        this.close();
-    }
-
-    dettachEvent(){
-        const that = this;
-        console.log('dettach');
         this.buttons.map(el => {
-            // console.log(el);
-            el.removeEventListener('click', that.defaultEvent, true);
+            el.addEventListener('click', that.handleDefaultClick);
         });
     }
 
+    dettachEvent(){
+        console.log('dettachEvent');
+        const that = this;
+
+        this.buttons.map(el => {
+            el.removeEventListener('click', that.handleDefaultClick);
+        });
+    }
+
+    handleDefaultClick({ target }){
+        console.log('handleDefaultClick');
+        const { LayerPopup } = target;
+
+        let state = (target.classList.value === 'done') ? true : false;
+            
+        if(LayerPopup.callback !== ''){
+            LayerPopup.callback(state);
+        } 
+
+        LayerPopup.close();
+    }
+    
     open(){
         console.log('open');
+        const { dim } = this.options; 
 
+        if(dim && this.dim) {
+            this.dim.classList.add('on');
+        }
+        
+        this.wrap.classList.add('on');
     }
 
     close(){
         console.log('close');
+        const { dim } = this.options; 
 
+        if(dim && this.dim) {
+            this.dim.classList.remove('on');
+        }
+
+        this.wrap.classList.remove('on');
     }
 
     remove(){
         console.log('remove');
+        this.wrap.remove();
+        this.dim.remove();
     }
 
 

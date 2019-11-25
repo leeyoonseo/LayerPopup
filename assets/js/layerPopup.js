@@ -46,8 +46,7 @@ class LayerPopup{
         const { className } = this.options;
 
         // class가 같은 팝업 처리
-        // const popup = document.querySelector('.' + className + '_wrap');
-        this.dim = document.querySelector('[data-type="dim"');
+        this.dim = document.querySelector('[data-type="dim"]');
         
         if(this.dim){
             this.same = true;
@@ -79,10 +78,9 @@ class LayerPopup{
             this.buttons = [this.done, this.cancel];
         }
 
-        // 옵션
+        // 배경
         if(dim && !this.dim) {
             this.dim = createElement({className : className + '_dim' });
-            this.dim.dataset.type = 'dim'
         }
 
         if(title !== ''){
@@ -103,6 +101,7 @@ class LayerPopup{
             // this.expireEls = [];
         }
 
+        this.setAttr();
         this.append(); 
 
 
@@ -120,33 +119,73 @@ class LayerPopup{
         function createElement({ tag = 'div', className, type = 'button', label }){
             const el = document.createElement(tag);
 
+            // 클래스
             if(className){
                 className = className.split(',');
+
+                // 클래스가 여러개일 경우
                 if(className.length > 1){
                     className.map((k) =>  el.classList.add(k));
 
                 }else{
                     el.classList.add(className);
-
                 }
             }
             
+            // 버튼 설정
             if(tag === 'button'){
                 el.setAttribute('type', type);
                 el.LayerPopup = this;
-            }
 
-            if(label){
-                el.innerText = label
+                if(label){
+                    el.innerText = label
+                }
             }
 
             return el;
+        }
+    } // create
+
+    setAttr(){
+        const { dim } = this.options;
+
+        this.wrap.dataset.type = 'layerPopup';
+
+
+        const other = findOtherPopup('[data-type="layerPopup"');
+        
+        if(other){
+            console.dir();
+            this.wrap.style.zIndex = Number(other.style.zIndex) + 1;
+
+        }else{
+            this.wrap.style.zIndex = 1000;
+        }
+
+        
+        // this.wrap.style.zIndex = (isFirstPopup) ?  '1000' : '1000' +  
+        
+        if(dim) {
+            this.dim.dataset.type = 'dim'
+        }
+
+
+
+
+        function findOtherPopup(name){
+            const target = document.querySelector(name);
+            
+            if(target){
+                return target;
+            }
+
+            return false;
         }
     }
 
     append(){
         console.log('append');
-        const { appendPosition, title } = this.options;
+        const { appendPosition, title, dim } = this.options;
 
         this.container.append(this.content);
 
@@ -165,7 +204,8 @@ class LayerPopup{
 
         this.attachEvent();
 
-        document.querySelector(appendPosition).append(this.wrap, this.dim);
+        document.querySelector(appendPosition).append(this.wrap);
+        if(dim && this.dim) document.body.append(this.dim);
     }
 
     setContent(){

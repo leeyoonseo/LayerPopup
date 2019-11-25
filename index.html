@@ -22,6 +22,8 @@
 </style>
 </head>
 <body id="index">
+    <div class="box2"></div> 
+    <div class="box"></div>
     <button id="open" class="open">
         팝업 열기1
     </button>
@@ -32,14 +34,21 @@
 <script>
     var open = document.querySelector('#open');
     var open2 = document.querySelector('#open2');
-    var popup = new LayerPopup();
+    var popup = new LayerPopup({
+        appendPosition : '.box',
+        title : '팝업1'
+    });
     var popup2 = new LayerPopup({
-        title : '알림',
-        dim : false
+        appendPosition : '.box2',
+        title : '팝업2'
     });
 
     open.addEventListener('click', () => {
         popup.open();
+
+        setTimeout(() => {
+            popup2.open();
+        },3000);
     });
 
     open2.addEventListener('click', () => {

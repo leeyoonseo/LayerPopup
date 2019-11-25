@@ -1,4 +1,5 @@
 class LayerPopup{
+    // [D] callback은 기본 확인, 취소 버튼 쓸 때 true, false 값을 리턴 받을 수 있다.
     constructor(options, callback){
         this.name = "LayerPopup";
 
@@ -7,19 +8,46 @@ class LayerPopup{
             appendPosition : 'body', // id나 class값 가능
             className : 'popup', 
             
-            title : '',
+            title : '타이틀',
             content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.', // 메세지나 객체 삽입
             dim : true, // true or false 
             
             
             // expired 여부
             // -- 몇 일
-            expired : true,
-            expiryDate : 30,
+            expired : false,           
+            expiredData : 
+            [
+                {
+                    date : 1,
+                    image : '',
+                    className : 'close_expired',
+                    id : 'day',
+                    label : '하루간보지않기'
+                },
+                {
+                    date : 30,
+                    image : '',
+                    className : 'close',
+                    id : 'thirtyDays',
+                    label : '30일간보지않기'
+                }
+            ],
+
+            // {
+            //     date : 1,
+            //     image : '',
+            //     className : 'chk_expired',
+            //     id : 'thirtyDays',
+            //     label : '하루간보지않기'
+            // },
+             // 기본이 하루
             // expiryDate : [30, 1], 
             //2개까지 가능?
 
             customButton : false, // true 일때
+
+            // 여러개 일 경우 배열로 작성
             button : [
                 {
                     type : '',
@@ -28,36 +56,18 @@ class LayerPopup{
                     event : '',
                 }
             ],
-            // todos
-            // 1. 커스텀 여부
-            // -- 버튼 
-            /// 
         }, options);
         
         this.callback = callback || '';
         this.init();
     }
 
-
-    // z-index도 1씩 증가해야 할 듯
-
     init(){
-        console.log('init'); 
-        const { className } = this.options;
-
-        // class가 같은 팝업 처리
-        this.dim = document.querySelector('[data-type="dim"]');
-        
-        if(this.dim){
-            this.same = true;
-        }
-
         this.create();
     }
 
     create(){
-        console.log('create');
-        const { className, customButton, title, dim, expired, expiryDate } = this.options;
+        const { className, customButton, title, dim, expired } = this.options;
 
         // 기본
         this.wrap = createElement({className : className + '_wrap'});
@@ -68,10 +78,40 @@ class LayerPopup{
 
         // 버튼
         if(customButton){
+            const that = this;
             const { button } = this.options;
-            console.log('customButton true, button');
+
+            // 버튼 여러개
+            if(Array.isArray(button)){
+                console.log('여러개',button);
+
+                this.buttons = [];
+                
+                button.map((e) => {
+                    console.log(e);
+                    
+                    that.buttons.push(createElement.call(that, { 
+                        tag : 'button', 
+                        type : e.type, 
+                        className : e.className, 
+                        label : e.label 
+                    }));
+                });
+                
+            // 버튼 한개
+            }else{
+                const btn = createElement.call(this, { 
+                    tag : 'button', 
+                    type : button.type, 
+                    className : button.className, 
+                    label : button.label 
+                });
+
+                this.buttons = btn;
+            }
 
         }else{
+            // 기본 버튼
             this.done = createElement.call(this, {tag : 'button', className : 'done', label : '확인'});
             this.cancel = createElement.call(this, {tag : 'button', className : 'cancel', label : '취소'});
 
@@ -79,34 +119,77 @@ class LayerPopup{
         }
 
         // 배경
+        this.dim = document.querySelector('[data-type="dim"]');
         if(dim && !this.dim) {
             this.dim = createElement({className : className + '_dim' });
         }
 
+        // 타이틀
         if(title !== ''){
             this.title = createElement({tag : 'p', className : 'title'});
         }
 
-        // 만료 설정
+        // 만료일 설정
         if(expired){
-            console.log('expiryDate',expiryDate);
-            if(Array.isArray(expiryDate)){
-                console.log('여러개');
+            const { expiredData } = this.options;
+            const commonClass = 'chk_expired';
+            let result, wrap, btn, label;
+
+            if(Array.isArray(expiredData)){
+                const that = this;
+                result = [];
+
+                expiredData.map((e) => {
+                    wrap = createElement.call(that, {tag : 'p', className : commonClass + '_wrap'});
+                    btn = createElement.call(that, {
+                        tag : 'input',
+                        type : 'checkbox', 
+                        name : commonClass, 
+                        className : e.className, 
+                        id : e.id,
+                        label : e.date
+                    });
+                    label = createElement.call(that,{
+                        tag : 'label',
+                        label : commonClass, 
+                        id : e.id,
+                        text : e.label
+                    });
+
+                    wrap.append(btn, label);
+                    result.push(wrap);
+                });
 
             }else{
-                console.log('한개');
+                wrap = createElement.call(this, {tag : 'p', className : commonClass + '_wrap'});
 
+                btn = createElement.call(this,{
+                    tag : 'input',
+                    type : 'checkbox', 
+                    className : commonClass, 
+                    id : expiredData.id,
+                    label : expiredData.date
+                });
+
+                label = createElement.call(this, {
+                    tag : 'label',
+                    label : commonClass, 
+                    id : expiredData.id,
+                    text : expiredData.label
+                });
+
+                wrap.append(btn, label);
+                result = wrap;
             }
 
-            // this.expireEls = [];
+            this.expiredBtns = result;
         }
 
         this.setAttr();
         this.append(); 
 
-
         /**
-         * 돔 생성
+         * 돔 생성, 버튼 생성하기 위해 호출 시 .call(this) 추가해야 함
          * @param {Object} 
          * @param tag 생성할 태그네임
          * @param className 추가할 클래스 명(복수일 경우 쉼표로 구분)
@@ -116,7 +199,7 @@ class LayerPopup{
          *      title = createElement({ tag : 'p', className : 'title,title-red,title-required' });
          *      button = createElement({ tag : 'button', className : 'cancel', type : 'button', label : '취소버튼' });
          */
-        function createElement({ tag = 'div', className, type = 'button', label }){
+        function createElement({ tag = 'div', id, className, name, type, label, text }){
             const el = document.createElement(tag);
 
             // 클래스
@@ -131,10 +214,27 @@ class LayerPopup{
                     el.classList.add(className);
                 }
             }
+
+            // 네임
+            if(name){
+                el.name = name;
+            }
+
+            // 아이디
+            if(id && tag !== 'label'){
+                el.id = id;
+            }
+
+            if(text){
+                el.innerText = text;
+            }
             
             // 버튼 설정
-            if(tag === 'button'){
+            if(type){
                 el.setAttribute('type', type);
+            }
+
+            if(tag === 'button'){
                 el.LayerPopup = this;
 
                 if(label){
@@ -142,35 +242,35 @@ class LayerPopup{
                 }
             }
 
+            // radio 설정
+            if(expired){
+                if(type === 'radio' || type === 'checkbox'){
+                    el.value = label;
+                    el.dataset.type = 'expired';
+                    el.LayerPopup = this;
+                }
+                
+                if(tag === 'label'){
+                    el.setAttribute('for', id);
+                }
+            }
+
+
+
             return el;
         }
     } // create
 
     setAttr(){
-        const { dim } = this.options;
+        const { dim, expired } = this.options;
+        const otherPopup = findOtherPopup('[data-type="layerPopup"');
 
+        this.wrap.style.zIndex = (otherPopup) ? Number(otherPopup.style.zIndex) + 1 : 1000;
         this.wrap.dataset.type = 'layerPopup';
 
-
-        const other = findOtherPopup('[data-type="layerPopup"');
-        
-        if(other){
-            console.dir();
-            this.wrap.style.zIndex = Number(other.style.zIndex) + 1;
-
-        }else{
-            this.wrap.style.zIndex = 1000;
-        }
-
-        
-        // this.wrap.style.zIndex = (isFirstPopup) ?  '1000' : '1000' +  
-        
         if(dim) {
-            this.dim.dataset.type = 'dim'
+            this.dim.dataset.type = 'dim';
         }
-
-
-
 
         function findOtherPopup(name){
             const target = document.querySelector(name);
@@ -184,24 +284,37 @@ class LayerPopup{
     }
 
     append(){
-        console.log('append');
-        const { appendPosition, title, dim } = this.options;
+        const { appendPosition, title, dim, expired } = this.options;
 
         this.container.append(this.content);
 
         if(title !== '') {
             this.header.append(this.title);
         }
+        
+        // 만료일
+        if(expired){
+            if(Array.isArray(this.expiredBtns)){
+                this.expiredBtns.map((e) => {
+                    this.footer.append(e);
+                });
 
-        if(this.buttons.length > 1){
-            this.buttons.map(el => this.footer.append(el));
+            }else{
+                this.footer.append(this.expiredBtns);
+            }
         }
+
+        if(Array.isArray(this.buttons)){
+            this.buttons.map(el => this.footer.append(el));
+
+        }else{
+            this.footer.append(this.buttons);
+        }
+
 
         this.wrap.append(this.header, this.container, this.footer);
         
         this.setContent();
-        // this.bindEvents(true);
-
         this.attachEvent();
 
         document.querySelector(appendPosition).append(this.wrap);
@@ -209,7 +322,6 @@ class LayerPopup{
     }
 
     setContent(){
-        console.log('setContent');
         const { title, content } = this.options;
         const outputContent = (typeof content === 'string') ? wordBreak(content, '\n', '<br>') 
                                                             : content;
@@ -226,14 +338,61 @@ class LayerPopup{
     }
 
     attachEvent(){
-        console.log('attachEvent');
         const that = this;
+        const { customButton, button, expired } = this.options;
+        
+        // 버튼
+        if(customButton){
+            if(Array.isArray(this.buttons)){
+                this.buttons.map(el => {
+                    button.find((e) => {
+                        if(el.className === e.className){
+                            el.addEventListener('click',e.event);
+                        }
+                    });
+                });
 
-        this.buttons.map(el => {
-            el.addEventListener('click', that.handleDefaultClick);
-        });
+            }else{
+                this.buttons.addEventListener('click', button.event);
+            }
+
+        }else{
+        // 기본
+            if(Array.isArray(this.buttons)){
+                this.buttons.map(el => {
+                    el.addEventListener('click', that.handleDefaultClick);
+                });
+            }
+        }    
+        
+        
+        if(expired){
+            if(Array.isArray(this.expiredBtns)){
+                this.expiredBtns.map(el => {
+                    Array.from(el.childNodes).find((e) => {
+                        if(e.tagName.toLowerCase() === 'input'){
+                            e.addEventListener('click', handlePreventOverlap);
+                        }
+                    });
+                });
+
+
+                // [D] 체크 겹치지 않게
+                function handlePreventOverlap({ target }){
+                    this.LayerPopup.expiredBtns.map((el) => {
+                        Array.from(el.childNodes).find((e) => {
+                            if(e.tagName.toLowerCase() === 'input' && e.id !== target.id) {
+                                e.checked = false;
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
     }
 
+    // [TODO] dettachEvent가 필요한가?
     dettachEvent(){
         console.log('dettachEvent');
         const that = this;
@@ -244,20 +403,38 @@ class LayerPopup{
     }
 
     handleDefaultClick({ target }){
-        console.log('handleDefaultClick');
         const { LayerPopup } = target;
+        const { expiredBtns } = LayerPopup;
+        const { expired } = LayerPopup.options;
+        
+        if(LayerPopup.callback && LayerPopup.callback !== ''){
+            let result = (target.classList.value === 'done') ? true : false;
+            LayerPopup.callback(result);
+        }
 
-        let state = (target.classList.value === 'done') ? true : false;
-            
-        if(LayerPopup.callback !== ''){
-            LayerPopup.callback(state);
-        } 
+        // 만료
+        if(expired){
+            let expiryData = 0;
 
-        LayerPopup.close();
+            if(Array.isArray(expiredBtns)){
+                expiredBtns.map(el => {
+                    Array.from(el.childNodes).find(e => {
+                        if(e.tagName.toLowerCase() === 'input' && e.checked) {
+                            expiryDate = e.value;
+                        }
+                    });
+                });
+
+            }else{
+
+
+
+            }
+        }
+        // LayerPopup.close();
     }
     
     open(){
-        console.log('open');
         const { dim } = this.options; 
 
         if(dim && this.dim) {
@@ -268,7 +445,6 @@ class LayerPopup{
     }
 
     close(){
-        console.log('close');
         const { dim } = this.options; 
 
         if(dim && this.dim) {
@@ -279,7 +455,6 @@ class LayerPopup{
     }
 
     remove(){
-        console.log('remove');
         this.wrap.remove();
         this.dim.remove();
     }

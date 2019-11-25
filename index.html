@@ -36,19 +36,47 @@
     var open2 = document.querySelector('#open2');
     var popup = new LayerPopup({
         appendPosition : '.box',
-        title : '팝업1'
+        title : '팝업1',
+
+
+        customButton : false,
+        button : {
+            type : 'submit',
+            className : 'button_submit',
+            label : '전송',
+            event : function(){
+                console.log('전송 버튼 클릭!');
+                this.LayerPopup.close();
+            }
+        },
+
+        expired : true,
+        // expiryData : {
+        //     date : 1,
+        //     image : '',
+        //     className : 'close_expired',
+        //     id : 'day',
+        //     label : '하루간보지않기'
+        // },
     });
     var popup2 = new LayerPopup({
         appendPosition : '.box2',
         title : '팝업2'
+
+    }, function(isState){
+        if(isState){
+            // 기본 확인 클릭
+        }else{
+            // 기본 취소 클릭
+        }
     });
 
     open.addEventListener('click', () => {
         popup.open();
 
-        setTimeout(() => {
-            popup2.open();
-        },3000);
+        // setTimeout(() => {
+        //     popup2.open();
+        // },3000);
     });
 
     open2.addEventListener('click', () => {

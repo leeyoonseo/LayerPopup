@@ -76,6 +76,8 @@ class LayerPopup{
         this.footer = createElement({className : className + '_footer'});
         this.content = createElement({tag : 'p', className : 'content'});
 
+        this.buttonsWrap = createElement({tag : 'div', className : 'buttons_wrap'});
+
         // 버튼
         if(customButton){
             const that = this;
@@ -88,15 +90,21 @@ class LayerPopup{
                 this.buttons = [];
                 
                 button.map((e) => {
-                    console.log(e);
-                    
-                    that.buttons.push(createElement.call(that, { 
-                        tag : 'button', 
-                        type : e.type, 
-                        className : e.className, 
-                        label : e.label 
-                    }));
-                });
+                    that.buttonsWrap.append(
+                        createElement.call(that, { 
+                            tag : 'button', 
+                            type : e.type, 
+                            className : e.className, 
+                            label : e.label 
+                        })
+                    );
+                    // that.buttons.push(createElement.call(that, { 
+                    //     tag : 'button', 
+                    //     type : e.type, 
+                    //     className : e.className, 
+                    //     label : e.label 
+                    // }));
+                });                
                 
             // 버튼 한개
             }else{
@@ -107,7 +115,17 @@ class LayerPopup{
                     label : button.label 
                 });
 
-                this.buttons = btn;
+                this.buttonsWrap.append(btn);
+                // this.buttonsWrap.append(
+                //     createElement.call(this, { 
+                //         tag : 'button', 
+                //         type : button.type, 
+                //         className : button.className, 
+                //         label : button.label 
+                //     })
+                // );
+                // this.buttons = btn;
+
             }
 
         }else{
@@ -115,7 +133,12 @@ class LayerPopup{
             this.done = createElement.call(this, {tag : 'button', className : 'done', label : '확인'});
             this.cancel = createElement.call(this, {tag : 'button', className : 'cancel', label : '취소'});
 
-            this.buttons = [this.done, this.cancel];
+            this.buttonsWrap.append(this.done, this.cancel);
+
+            // console.log(this.buttonWrap);
+            // this.buttonsWrap(this.done, this.cancel);
+
+            // this.buttons = [this.done, this.cancel];
         }
 
         // 배경
@@ -304,13 +327,7 @@ class LayerPopup{
             }
         }
 
-        if(Array.isArray(this.buttons)){
-            this.buttons.map(el => this.footer.append(el));
-
-        }else{
-            this.footer.append(this.buttons);
-        }
-
+        this.footer.append(this.buttonsWrap);
 
         this.wrap.append(this.header, this.container, this.footer);
         
@@ -414,13 +431,17 @@ class LayerPopup{
 
         // 만료
         if(expired){
-            let expiryData = 0;
+            this.uniqueCookieName = '';
+            let expiryDate = 0;
 
             if(Array.isArray(expiredBtns)){
                 expiredBtns.map(el => {
                     Array.from(el.childNodes).find(e => {
                         if(e.tagName.toLowerCase() === 'input' && e.checked) {
                             expiryDate = e.value;
+                            console.log(expiryDate);
+                            LayerPopup.setCookie(true, expiryDate);
+
                         }
                     });
                 });
@@ -430,18 +451,41 @@ class LayerPopup{
 
 
             }
+
+            
         }
-        // LayerPopup.close();
+        LayerPopup.close();
+    }
+
+    
+
+    setCookie(value, days){
+        const date = new Date();
+        this.uniqueName = this.options.className + date.getHours() + date.getMinutes() + date.getSeconds();
+
+        date.setDate(date.getDate() + Number(days));
+        document.cookie = this.uniqueName + "=" + escape(value) + "; path=/; expires=" + date.toUTCString() + ";"
     }
     
-    open(){
-        const { dim } = this.options; 
+    // [TODO] 작업해야함
+    getCookie(name){
+        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return value? value[2] : null;
+    }
 
-        if(dim && this.dim) {
-            this.dim.classList.add('on');
+    open(){
+        if(this.uniqueName && this.getCookie(this.uniqueName)){
+            console.log('쿠키네임:',this.uniqueName,'로 쿠키 적용 중입니다.');
+
+        }else{
+            const { dim } = this.options; 
+
+            if(dim && this.dim) {
+                this.dim.classList.add('on');
+            }
+            
+            this.wrap.classList.add('on');
         }
-        
-        this.wrap.classList.add('on');
     }
 
     close(){

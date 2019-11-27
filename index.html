@@ -34,14 +34,22 @@
 <script>
     var open1 = document.querySelector('#open');
     var open2 = document.querySelector('#open2');
-    var popup = new LayerPopup({
-        appendPosition : '.box',
-        title : '팝업1',
-    });
+    // var popup = new LayerPopup({
+    //     appendPosition : '.box',
+    //     title : '팝업1',
+    // });
+
+        var p = document.createElement('p')
+        p.innerText = '나는 p다';
+        var test = document.createElement('div')
+        test.append(p);
+console.log(test);
 
     var popup2 = new LayerPopup({
         appendPosition : '.box2',
-        title : ''
+        title : '',
+        // content : '<div style="color:red;">123</div>\n헤헤'
+        content : test
 
     }, function(isState){
         if(isState){
@@ -54,32 +62,32 @@
     });
 
 
-    var popup3 = new LayerPopup({
-        title : '팝업3'
-    });
-    var popup4 = new LayerPopup({
-        title : '팝업4'
-    });
-    var popup5 = new LayerPopup({
-        title : '팝업5'
-    });
+    // var popup3 = new LayerPopup({
+    //     title : '팝업3'
+    // });
+    // var popup4 = new LayerPopup({
+    //     title : '팝업4'
+    // });
+    // var popup5 = new LayerPopup({
+    //     title : '팝업5'
+    // });
 
-    open2.addEventListener('click', () => {
-        popup.open();
+    // open2.addEventListener('click', () => {
+    //     popup.open();
 
-        setTimeout(() => {
-            popup2.open();
-        },1000);
-        setTimeout(() => {
-            popup3.open();
-        },2000);
-        setTimeout(() => {
-            popup4.open();
-        },3000);
-        setTimeout(() => {
-            popup5.open();
-        },4000);
-    });
+    //     setTimeout(() => {
+    //         popup2.open();
+    //     },1000);
+    //     setTimeout(() => {
+    //         popup3.open();
+    //     },2000);
+    //     setTimeout(() => {
+    //         popup4.open();
+    //     },3000);
+    //     setTimeout(() => {
+    //         popup5.open();
+    //     },4000);
+    // });
 
     open1.addEventListener('click', () => {
         popup2.open();

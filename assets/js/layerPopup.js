@@ -4,17 +4,14 @@ class LayerPopup{
         this.name = "LayerPopup";
 
         this.options = Object.assign({}, {
-            // default 옵션   
-            appendPosition : 'body', // id나 class값 가능
+            appendPosition : 'body', // id, class, tagName 값 가능하나 중복되는 영역 값 불가
             className : 'popup', 
             
             title : '타이틀',
             content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.', // 메세지나 객체 삽입
             dim : true, // true or false 
             
-            
-            // expired 여부
-            // -- 몇 일
+            // 만료일 설정
             expired : false,           
             expireData : {
                 date : 1,
@@ -57,7 +54,7 @@ class LayerPopup{
 
         this.container = createElement({className : className + '_container'});
         this.footer = createElement({className : className + '_footer'});
-        this.content = createElement({tag : 'p', className : 'content'});
+        this.content = createElement({tag : 'div', className : className + '_content'});
         this.buttonsWrap = createElement({tag : 'div', className : className + '_buttons_wrap'});
 
         // 버튼
@@ -120,7 +117,7 @@ class LayerPopup{
         if(expired && expireData){
             const { className } = this.options;
             const commonClass = className + '_expire';
-            let result, box, btn, label;
+            let box, btn, label;
 
             this.expireWrap = createElement.call(this,{
                 tag : 'div',
@@ -336,17 +333,27 @@ class LayerPopup{
     }
 
     setContent(){
+        console.log('setContent');
         const { title, content } = this.options;
-        const outputContent = (typeof content === 'string') ? wordBreak(content, '\n', '<br>') 
-                                                            : content;
+        let outputContent = content;
 
+        // [TODO] 아이콘 넣을 수 있나?
         if(title !== '') {
             this.title.innerText = title;
         }
-        this.content.innerHTML = outputContent;
 
-        // \n -> <br>
-        function wordBreak(text, org, dest){
+        // 문자
+        if(typeof content === 'string'){
+            outputContent = wordBreak(content);
+            this.content.innerHTML = outputContent;
+
+        }else{
+        // 객체
+            this.content.append(outputContent);
+        }
+
+        // [D] \n를 <br>로 변환
+        function wordBreak(text, org = '\n', dest = '<br>'){
             return text.split(org).join(dest);
         }
     }

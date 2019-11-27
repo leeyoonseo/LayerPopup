@@ -263,14 +263,14 @@ class LayerPopup{
         function defaultButtons(){
             this.done = createElement.call(this, {
                 tag : 'button', 
-                className : 'done', 
+                className : className + '_button_done', 
                 type : 'submit',
                 label : '확인'
             });
 
             this.cancel = createElement.call(this, {
                 tag : 'button', 
-                className : 'cancel', 
+                className : className + '_button_cancel', 
                 label : '취소'
             });
 
@@ -333,13 +333,16 @@ class LayerPopup{
     }
 
     setContent(){
-        console.log('setContent');
         const { title, content } = this.options;
         let outputContent = content;
 
-        // [TODO] 아이콘 넣을 수 있나?
-        if(title !== '') {
-            this.title.innerText = title;
+        if(title) {
+            if(typeof title === 'string'){
+                this.title.innerHTML = title;
+
+            }else{
+                this.title.append(title);
+            }
         }
 
         // 문자
@@ -568,7 +571,4 @@ class LayerPopup{
         this.wrap.remove();
         this.dim.remove();
     }
-
-
-
 }

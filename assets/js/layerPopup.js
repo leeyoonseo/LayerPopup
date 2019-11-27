@@ -75,7 +75,6 @@ class LayerPopup{
         this.container = createElement({className : className + '_container'});
         this.footer = createElement({className : className + '_footer'});
         this.content = createElement({tag : 'p', className : 'content'});
-
         this.buttonsWrap = createElement({tag : 'div', className : 'buttons_wrap'});
 
         // 버튼
@@ -83,63 +82,45 @@ class LayerPopup{
             const that = this;
             const { button } = this.options;
 
-            // 버튼 여러개
-            if(Array.isArray(button)){
-                console.log('여러개',button);
+            if(button === ''){
+                // 기본 버튼
+                defaultButtons.call(this);
 
-                this.buttons = [];
+            }else if(Array.isArray(button) && button.length > 1){
+            // 버튼 여러개
+                console.log('여러개 생성',button);
                 
                 button.map((e) => {
-                    that.buttonsWrap.append(
-                        createElement.call(that, { 
-                            tag : 'button', 
-                            type : e.type, 
-                            className : e.className, 
-                            label : e.label 
-                        })
-                    );
-                    // that.buttons.push(createElement.call(that, { 
-                    //     tag : 'button', 
-                    //     type : e.type, 
-                    //     className : e.className, 
-                    //     label : e.label 
-                    // }));
+                    // console.log(123,type, className, label);
+                    let el = createElement.call(that, { 
+                        tag : 'button', 
+                        type : e.type, 
+                        className : e.className, 
+                        label : e.label 
+                    });
+
+                    that.buttonsWrap.append(el);
                 });                
-                
+
             // 버튼 한개
             }else{
-                const btn = createElement.call(this, { 
+                console.log('한개 생성',button);
+                let btn = (Array.isArray(button)) ? button[0] : button;
+
+                const el = createElement.call(this, { 
                     tag : 'button', 
-                    type : button.type, 
-                    className : button.className, 
-                    label : button.label 
+                    type : btn.type, 
+                    className : btn.className, 
+                    label : btn.label 
                 });
-
-                this.buttonsWrap.append(btn);
-                // this.buttonsWrap.append(
-                //     createElement.call(this, { 
-                //         tag : 'button', 
-                //         type : button.type, 
-                //         className : button.className, 
-                //         label : button.label 
-                //     })
-                // );
-                // this.buttons = btn;
-
+                
+                this.buttonsWrap.append(el);
             }
 
         }else{
             // 기본 버튼
-            this.done = createElement.call(this, {tag : 'button', className : 'done', label : '확인'});
-            this.cancel = createElement.call(this, {tag : 'button', className : 'cancel', label : '취소'});
-
-            this.buttonsWrap.append(this.done, this.cancel);
-
-            // console.log(this.buttonWrap);
-            // this.buttonsWrap(this.done, this.cancel);
-
-            // this.buttons = [this.done, this.cancel];
-        }
+            defaultButtons.call(this);
+        }        
 
         // 배경
         this.dim = document.querySelector('[data-type="dim"]');
@@ -172,6 +153,7 @@ class LayerPopup{
                         id : e.id,
                         label : e.date
                     });
+
                     label = createElement.call(that,{
                         tag : 'label',
                         label : commonClass, 
@@ -206,7 +188,7 @@ class LayerPopup{
             }
 
             this.expiredBtns = result;
-        }
+        } // expired
 
         this.setAttr();
         this.append(); 
@@ -222,16 +204,25 @@ class LayerPopup{
          *      title = createElement({ tag : 'p', className : 'title,title-red,title-required' });
          *      button = createElement({ tag : 'button', className : 'cancel', type : 'button', label : '취소버튼' });
          */
-        function createElement({ tag = 'div', id, className, name, type, label, text }){
+        function createElement({ 
+            tag = 'div', 
+            id, 
+            className, 
+            name, 
+            type = 'button', 
+            label = '버튼', 
+            text 
+        }){
+
             const el = document.createElement(tag);
 
             // 클래스
             if(className){
-                className = className.split(',');
+                const classNames = className.split(',');
 
                 // 클래스가 여러개일 경우
-                if(className.length > 1){
-                    className.map((k) =>  el.classList.add(k));
+                if(classNames.length > 1){
+                    classNames.map((k) =>  el.classList.add(k));
 
                 }else{
                     el.classList.add(className);
@@ -252,17 +243,10 @@ class LayerPopup{
                 el.innerText = text;
             }
             
-            // 버튼 설정
-            if(type){
-                el.setAttribute('type', type);
-            }
-
             if(tag === 'button'){
                 el.LayerPopup = this;
-
-                if(label){
-                    el.innerText = label
-                }
+                el.setAttribute('type', (type !== '') ? type : 'button');
+                el.innerText = (label !== '') ? label : '버튼';
             }
 
             // radio 설정
@@ -278,10 +262,28 @@ class LayerPopup{
                 }
             }
 
-
-
             return el;
-        }
+
+        } // createElement
+
+        function defaultButtons(){
+            this.done = createElement.call(this, {
+                tag : 'button', 
+                className : 'done', 
+                type : 'submit',
+                label : '확인'
+            });
+
+            this.cancel = createElement.call(this, {
+                tag : 'button', 
+                className : 'cancel', 
+                label : '취소'
+            });
+
+            this.buttonsWrap.append(this.done, this.cancel);
+            
+        } // defaultButtons
+
     } // create
 
     setAttr(){
@@ -316,6 +318,7 @@ class LayerPopup{
         }
         
         // 만료일
+        // [TODO] 이것도 warp만들것
         if(expired){
             if(Array.isArray(this.expiredBtns)){
                 this.expiredBtns.map((e) => {
@@ -357,32 +360,48 @@ class LayerPopup{
     attachEvent(){
         const that = this;
         const { customButton, button, expired } = this.options;
-        
-        // 버튼
+        const buttons = this.buttonsWrap.childNodes;
+
+        // 커스텀 버튼
         if(customButton){
-            if(Array.isArray(this.buttons)){
-                this.buttons.map(el => {
-                    button.find((e) => {
-                        if(el.className === e.className){
-                            el.addEventListener('click',e.event);
+            if(button === ''){
+                defaultEvent.call(this);
+
+            }else if(buttons.length > 1){
+            // 여러개
+                console.log('여러개');
+                Array.from(buttons).map(el => {
+                    button.find(({className, event}) => {
+                        if(event === ''){
+                            console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
+                            event = that.handleDefaultClick;
+                        }
+
+                        if(el.className === className){
+                            el.addEventListener('click', event);
                         }
                     });
                 });
 
             }else{
-                this.buttons.addEventListener('click', button.event);
+            // 한개
+                console.log('한개 이벤트');
+                let event = (Array.isArray(button))? button[0].event : button.event;
+                
+                if(event === ''){
+                    console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
+                    event = this.handleDefaultClick;
+                }
+
+                buttons[0].addEventListener('click', event);
             }
 
         }else{
-        // 기본
-            if(Array.isArray(this.buttons)){
-                this.buttons.map(el => {
-                    el.addEventListener('click', that.handleDefaultClick);
-                });
-            }
-        }    
-        
-        
+        // 기본 버튼 (2개)
+            defaultEvent.call(this);
+
+        }           
+                
         if(expired){
             if(Array.isArray(this.expiredBtns)){
                 this.expiredBtns.map(el => {
@@ -405,29 +424,47 @@ class LayerPopup{
                     });
                 }
             }
-        }
+        } // expired
 
-    }
+        function defaultEvent(){
+            console.log('defaultEvent');
+            const that = this;
+
+            if(this.buttonsWrap.childNodes.length > 1){
+                const buttons = this.buttonsWrap.childNodes;
+
+                Array.from(buttons).map(el => {
+                    el.addEventListener('click', that.handleDefaultClick);
+                });
+            }
+        }
+    } // attachEvent
 
     // [TODO] dettachEvent가 필요한가?
     dettachEvent(){
         console.log('dettachEvent');
         const that = this;
+        const buttons = this.buttonsWrap.childNodes;
 
-        this.buttons.map(el => {
+        Array.from(buttons).map(el => {
             el.removeEventListener('click', that.handleDefaultClick);
         });
     }
 
     handleDefaultClick({ target }){
+        console.log('handleDefaultClick');
         const { LayerPopup } = target;
-        const { expiredBtns } = LayerPopup;
-        const { expired } = LayerPopup.options;
-        
         if(LayerPopup.callback && LayerPopup.callback !== ''){
             let result = (target.classList.value === 'done') ? true : false;
             LayerPopup.callback(result);
         }
+
+        LayerPopup.close();
+    }
+
+    handleExpire({ target }){
+        const { expiredBtns } = LayerPopup;
+        const { expired } = LayerPopup.options;
 
         // 만료
         if(expired){
@@ -451,11 +488,46 @@ class LayerPopup{
 
 
             }
+        } // if
+    }
+
+    // handleDefaultClick({ target }){
+    //     const { LayerPopup } = target;
+    //     const { expiredBtns } = LayerPopup;
+    //     const { expired } = LayerPopup.options;
+        
+    //     if(LayerPopup.callback && LayerPopup.callback !== ''){
+    //         let result = (target.classList.value === 'done') ? true : false;
+    //         LayerPopup.callback(result);
+    //     }
+
+    //     // 만료
+    //     if(expired){
+    //         this.uniqueCookieName = '';
+    //         let expiryDate = 0;
+
+    //         if(Array.isArray(expiredBtns)){
+    //             expiredBtns.map(el => {
+    //                 Array.from(el.childNodes).find(e => {
+    //                     if(e.tagName.toLowerCase() === 'input' && e.checked) {
+    //                         expiryDate = e.value;
+    //                         console.log(expiryDate);
+    //                         LayerPopup.setCookie(true, expiryDate);
+
+    //                     }
+    //                 });
+    //             });
+
+    //         }else{
+
+
+
+    //         }
 
             
-        }
-        LayerPopup.close();
-    }
+    //     }
+    //     LayerPopup.close();
+    // }
 
     
 

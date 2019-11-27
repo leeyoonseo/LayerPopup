@@ -28,50 +28,60 @@
         팝업 열기1
     </button>
     <button id="open2" class="open">
-        팝업 열기2
+        팝업 여러개 테스트2
     </button>
 <script src="./assets/js/layerPopup.js"></script>
 <script>
-    var open = document.querySelector('#open');
+    var open1 = document.querySelector('#open');
     var open2 = document.querySelector('#open2');
     var popup = new LayerPopup({
         appendPosition : '.box',
         title : '팝업1',
-
-
-        customButton : false,
-        button : '',
-
-        expired : true,
-        // expiryData : {
-        //     date : 1,
-        //     image : '',
-        //     className : 'close_expired',
-        //     id : 'day',
-        //     label : '하루간보지않기'
-        // },
     });
+
     var popup2 = new LayerPopup({
         appendPosition : '.box2',
-        title : '팝업2'
+        title : ''
 
     }, function(isState){
         if(isState){
             // 기본 확인 클릭
+
         }else{
             // 기본 취소 클릭
+            
         }
     });
 
-    open.addEventListener('click', () => {
-        popup.open();
 
-        // setTimeout(() => {
-        //     popup2.open();
-        // },3000);
+    var popup3 = new LayerPopup({
+        title : '팝업3'
+    });
+    var popup4 = new LayerPopup({
+        title : '팝업4'
+    });
+    var popup5 = new LayerPopup({
+        title : '팝업5'
     });
 
     open2.addEventListener('click', () => {
+        popup.open();
+
+        setTimeout(() => {
+            popup2.open();
+        },1000);
+        setTimeout(() => {
+            popup3.open();
+        },2000);
+        setTimeout(() => {
+            popup4.open();
+        },3000);
+        setTimeout(() => {
+            popup5.open();
+        },4000);
+    });
+
+    open1.addEventListener('click', () => {
         popup2.open();
     });
 </script>

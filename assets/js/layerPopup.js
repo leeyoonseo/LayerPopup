@@ -16,34 +16,13 @@ class LayerPopup{
             // expired 여부
             // -- 몇 일
             expired : false,           
-            expiredData : 
-            [
-                {
-                    date : 1,
-                    image : '',
-                    className : 'close_expired',
-                    id : 'day',
-                    label : '하루간보지않기'
-                },
-                {
-                    date : 30,
-                    image : '',
-                    className : 'close',
-                    id : 'thirtyDays',
-                    label : '30일간보지않기'
-                }
-            ],
-
-            // {
-            //     date : 1,
-            //     image : '',
-            //     className : 'chk_expired',
-            //     id : 'thirtyDays',
-            //     label : '하루간보지않기'
-            // },
-             // 기본이 하루
-            // expiryDate : [30, 1], 
-            //2개까지 가능?
+            expireData : {
+                date : 1,
+                image : '',
+                className : 'close_expired',
+                id : 'day',
+                label : '하루간보지않기'
+            },
 
             customButton : false, // true 일때
 
@@ -67,15 +46,19 @@ class LayerPopup{
     }
 
     create(){
-        const { className, customButton, title, dim, expired } = this.options;
+        const { className, customButton, title, dim, expired, expireData } = this.options;
 
         // 기본
         this.wrap = createElement({className : className + '_wrap'});
-        this.header = createElement({className : className + '_header'});
+
+        if(title) {
+            this.header = createElement({className : className + '_header'});
+        }
+
         this.container = createElement({className : className + '_container'});
         this.footer = createElement({className : className + '_footer'});
         this.content = createElement({tag : 'p', className : 'content'});
-        this.buttonsWrap = createElement({tag : 'div', className : 'buttons_wrap'});
+        this.buttonsWrap = createElement({tag : 'div', className : className + '_buttons_wrap'});
 
         // 버튼
         if(customButton){
@@ -134,21 +117,31 @@ class LayerPopup{
         }
 
         // 만료일 설정
-        if(expired){
-            const { expiredData } = this.options;
-            const commonClass = 'chk_expired';
-            let result, wrap, btn, label;
+        if(expired && expireData){
+            const { className } = this.options;
+            const commonClass = className + '_expire';
+            let result, box, btn, label;
 
-            if(Array.isArray(expiredData)){
+            this.expireWrap = createElement.call(this,{
+                tag : 'div',
+                className : commonClass + '_wrap'
+            });
+
+            if(Array.isArray(expireData)){
+                console.log('expireData 여러개 생성');
+
                 const that = this;
-                result = [];
 
-                expiredData.map((e) => {
-                    wrap = createElement.call(that, {tag : 'p', className : commonClass + '_wrap'});
+                expireData.map((e) => {
+                    box = createElement.call(that, {
+                        tag : 'p', 
+                        className : commonClass + '_box'
+                    });
+                    
                     btn = createElement.call(that, {
                         tag : 'input',
                         type : 'checkbox', 
-                        name : commonClass, 
+                        name : commonClass + '_chk', 
                         className : e.className, 
                         id : e.id,
                         label : e.date
@@ -156,42 +149,45 @@ class LayerPopup{
 
                     label = createElement.call(that,{
                         tag : 'label',
-                        label : commonClass, 
+                        label : commonClass + '_label', 
                         id : e.id,
                         text : e.label
                     });
 
-                    wrap.append(btn, label);
-                    result.push(wrap);
+                    box.append(btn, label);
+                    this.expireWrap.append(box);
                 });
 
             }else{
-                wrap = createElement.call(this, {tag : 'p', className : commonClass + '_wrap'});
+                console.log('expireData 한개 생성');
+
+                box = createElement.call(this, {
+                    tag : 'p',
+                     className : commonClass + '_box'
+                });
 
                 btn = createElement.call(this,{
                     tag : 'input',
                     type : 'checkbox', 
-                    className : commonClass, 
-                    id : expiredData.id,
-                    label : expiredData.date
+                    className : commonClass + '_chk', 
+                    id : expireData.id,
+                    label : expireData.date
                 });
 
                 label = createElement.call(this, {
                     tag : 'label',
-                    label : commonClass, 
-                    id : expiredData.id,
-                    text : expiredData.label
+                    label : commonClass + '_label', 
+                    id : expireData.id,
+                    text : expireData.label
                 });
 
-                wrap.append(btn, label);
-                result = wrap;
+                box.append(btn, label);
+                this.expireWrap.append(box);
             }
-
-            this.expiredBtns = result;
         } // expired
 
-        this.setAttr();
-        this.append(); 
+        this.setAttribute();
+        this.layoutAppend(); 
 
         /**
          * 돔 생성, 버튼 생성하기 위해 호출 시 .call(this) 추가해야 함
@@ -244,8 +240,8 @@ class LayerPopup{
             }
             
             if(tag === 'button'){
-                el.LayerPopup = this;
                 el.setAttribute('type', (type !== '') ? type : 'button');
+                el.LayerPopup = this;
                 el.innerText = (label !== '') ? label : '버튼';
             }
 
@@ -253,6 +249,7 @@ class LayerPopup{
             if(expired){
                 if(type === 'radio' || type === 'checkbox'){
                     el.value = label;
+                    el.setAttribute('type', type);
                     el.dataset.type = 'expired';
                     el.LayerPopup = this;
                 }
@@ -286,8 +283,8 @@ class LayerPopup{
 
     } // create
 
-    setAttr(){
-        const { dim, expired } = this.options;
+    setAttribute(){
+        const { dim } = this.options;
         const otherPopup = findOtherPopup('[data-type="layerPopup"');
 
         this.wrap.style.zIndex = (otherPopup) ? Number(otherPopup.style.zIndex) + 1 : 1000;
@@ -308,31 +305,28 @@ class LayerPopup{
         }
     }
 
-    append(){
-        const { appendPosition, title, dim, expired } = this.options;
+    layoutAppend(){
+        const { appendPosition, title, dim, expired, expireData } = this.options;
 
         this.container.append(this.content);
 
-        if(title !== '') {
+        if(title) {
             this.header.append(this.title);
         }
         
         // 만료일
-        // [TODO] 이것도 warp만들것
-        if(expired){
-            if(Array.isArray(this.expiredBtns)){
-                this.expiredBtns.map((e) => {
-                    this.footer.append(e);
-                });
-
-            }else{
-                this.footer.append(this.expiredBtns);
-            }
+        if(expired && expireData){
+            this.footer.append(this.expireWrap);
         }
 
         this.footer.append(this.buttonsWrap);
 
-        this.wrap.append(this.header, this.container, this.footer);
+        if(title){
+            this.wrap.append(this.header, this.container, this.footer);
+
+        }else{
+            this.wrap.append(this.container, this.footer);
+        }
         
         this.setContent();
         this.attachEvent();
@@ -359,13 +353,13 @@ class LayerPopup{
 
     attachEvent(){
         const that = this;
-        const { customButton, button, expired } = this.options;
-        const buttons = this.buttonsWrap.childNodes;
+        const { customButton, button, expired, expireData } = this.options;
+        const buttons = this.buttonsWrap.childNodes;        
 
         // 커스텀 버튼
         if(customButton){
             if(button === ''){
-                defaultEvent.call(this);
+                defaultButtonCaller.call(this);
 
             }else if(buttons.length > 1){
             // 여러개
@@ -387,8 +381,8 @@ class LayerPopup{
             // 한개
                 console.log('한개 이벤트');
                 let event = (Array.isArray(button))? button[0].event : button.event;
-                
-                if(event === ''){
+
+                if(!event || event === ''){
                     console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
                     event = this.handleDefaultClick;
                 }
@@ -398,25 +392,30 @@ class LayerPopup{
 
         }else{
         // 기본 버튼 (2개)
-            defaultEvent.call(this);
-
+            defaultButtonCaller.call(this);
         }           
                 
-        if(expired){
-            if(Array.isArray(this.expiredBtns)){
-                this.expiredBtns.map(el => {
-                    Array.from(el.childNodes).find((e) => {
+        // 만료일
+        if(expired && expireData){
+            const expireBox = this.expireWrap.childNodes;
+
+            if(expireBox.length > 1){
+                console.log('여러개');
+
+                Array.from(expireBox).map(({childNodes}) => {
+                    Array.from(childNodes).find(e => {
                         if(e.tagName.toLowerCase() === 'input'){
-                            e.addEventListener('click', handlePreventOverlap);
+                            e.addEventListener('click', handleCheckbox);
                         }
                     });
                 });
 
-
                 // [D] 체크 겹치지 않게
-                function handlePreventOverlap({ target }){
-                    this.LayerPopup.expiredBtns.map((el) => {
-                        Array.from(el.childNodes).find((e) => {
+                function handleCheckbox({ target }){
+                    const expire = this.LayerPopup.expireWrap.childNodes;
+
+                    Array.from(expire).map(({childNodes}) => {
+                        Array.from(childNodes).find(e => {
                             if(e.tagName.toLowerCase() === 'input' && e.id !== target.id) {
                                 e.checked = false;
                             }
@@ -426,8 +425,7 @@ class LayerPopup{
             }
         } // expired
 
-        function defaultEvent(){
-            console.log('defaultEvent');
+        function defaultButtonCaller(){
             const that = this;
 
             if(this.buttonsWrap.childNodes.length > 1){
@@ -452,94 +450,52 @@ class LayerPopup{
     }
 
     handleDefaultClick({ target }){
-        console.log('handleDefaultClick');
         const { LayerPopup } = target;
+        const { options, expireWrap } = LayerPopup;
+        const { expired, expireData } = options;
+
         if(LayerPopup.callback && LayerPopup.callback !== ''){
             let result = (target.classList.value === 'done') ? true : false;
             LayerPopup.callback(result);
         }
 
+        if(expired && expireData){
+            const expire = expireWrap.childNodes;
+                Array.from(expire).map(({childNodes}) => {
+                    Array.from(childNodes).map(e => {
+                        if(e.tagName.toLowerCase() === 'input'){
+                            if(e.checked){
+                                LayerPopup.handleExpire(e.value);
+                            }
+                        }
+                    });
+
+                });
+        }
+
         LayerPopup.close();
     }
 
-    handleExpire({ target }){
-        const { expiredBtns } = LayerPopup;
-        const { expired } = LayerPopup.options;
-
-        // 만료
-        if(expired){
-            this.uniqueCookieName = '';
-            let expiryDate = 0;
-
-            if(Array.isArray(expiredBtns)){
-                expiredBtns.map(el => {
-                    Array.from(el.childNodes).find(e => {
-                        if(e.tagName.toLowerCase() === 'input' && e.checked) {
-                            expiryDate = e.value;
-                            console.log(expiryDate);
-                            LayerPopup.setCookie(true, expiryDate);
-
-                        }
-                    });
-                });
-
-            }else{
-
-
-
-            }
-        } // if
-    }
-
-    // handleDefaultClick({ target }){
-    //     const { LayerPopup } = target;
-    //     const { expiredBtns } = LayerPopup;
-    //     const { expired } = LayerPopup.options;
+    handleExpire(day){        
+        const { className } = this.options;
+        let i = 0;
+        let uniqueNumber = new Date().getMinutes();
         
-    //     if(LayerPopup.callback && LayerPopup.callback !== ''){
-    //         let result = (target.classList.value === 'done') ? true : false;
-    //         LayerPopup.callback(result);
-    //     }
+        for(; i < 4; i++){
+            uniqueNumber += String(Math.floor(Math.random() * 9));
+        }
 
-    //     // 만료
-    //     if(expired){
-    //         this.uniqueCookieName = '';
-    //         let expiryDate = 0;
-
-    //         if(Array.isArray(expiredBtns)){
-    //             expiredBtns.map(el => {
-    //                 Array.from(el.childNodes).find(e => {
-    //                     if(e.tagName.toLowerCase() === 'input' && e.checked) {
-    //                         expiryDate = e.value;
-    //                         console.log(expiryDate);
-    //                         LayerPopup.setCookie(true, expiryDate);
-
-    //                     }
-    //                 });
-    //             });
-
-    //         }else{
-
-
-
-    //         }
-
-            
-    //     }
-    //     LayerPopup.close();
-    // }
-
-    
+        this.uniqueName = className + uniqueNumber;
+        this.setCookie(this.uniqueName, day);
+    }
 
     setCookie(value, days){
         const date = new Date();
-        this.uniqueName = this.options.className + date.getHours() + date.getMinutes() + date.getSeconds();
 
         date.setDate(date.getDate() + Number(days));
         document.cookie = this.uniqueName + "=" + escape(value) + "; path=/; expires=" + date.toUTCString() + ";"
     }
     
-    // [TODO] 작업해야함
     getCookie(name){
         var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
         return value? value[2] : null;
@@ -547,7 +503,7 @@ class LayerPopup{
 
     open(){
         if(this.uniqueName && this.getCookie(this.uniqueName)){
-            console.log('쿠키네임:',this.uniqueName,'로 쿠키 적용 중입니다.');
+            console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
             const { dim } = this.options; 
@@ -561,14 +517,45 @@ class LayerPopup{
     }
 
     close(){
-        const { dim } = this.options; 
-
-        if(dim && this.dim) {
-            this.dim.classList.remove('on');
-        }
+        const { expireWrap } = this;
+        const { dim, expired, expireData } = this.options;
 
         this.wrap.classList.remove('on');
-    }
+
+        if(dim && this.dim) {
+            const layer = document.querySelectorAll('[data-type="layerPopup"]');
+            const reg = /on/;
+            let i = 0;
+
+            // 팝업이 여러개일때 딤처리
+            Array.from(layer).map(({classList}) => {
+                if(!reg.test(classList.value)){
+                    i ++;
+                }
+            });
+
+            if(layer.length === i){
+                this.dim.classList.remove('on');
+            }
+        }
+
+        if(expired && expireData){
+            resetChecked();
+
+            function resetChecked(){
+                const expire = expireWrap.childNodes;
+                Array.from(expire).map(({childNodes}) => {
+                    Array.from(childNodes).map(e => {
+                        if(e.tagName.toLowerCase() === 'input' && e.checked){
+                            e.checked = false;
+                        }
+                    });
+                });
+
+            } // resetChecked
+
+        } // expired
+    } // close
 
     remove(){
         this.wrap.remove();

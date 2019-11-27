@@ -1,29 +1,22 @@
 class LayerPopup{
-    // [D] callback은 기본 확인, 취소 버튼 쓸 때 true, false 값을 리턴 받을 수 있다.
-    constructor(options, callback){
+    constructor(parameters, callbackFunction){
         this.name = "LayerPopup";
 
         this.options = Object.assign({}, {
-            appendPosition : 'body', // id, class, tagName 값 가능하나 중복되는 영역 값 불가
+            appendPosition : 'body', 
             className : 'popup', 
-            
             title : '타이틀',
-            content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.', // 메세지나 객체 삽입
-            dim : true, // true or false 
+            content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.',
+            dim : true,
             
-            // 만료일 설정
             expired : false,           
             expireData : {
                 date : 1,
-                image : '',
-                className : 'close_expired',
                 id : 'day',
                 label : '하루간보지않기'
             },
 
-            customButton : false, // true 일때
-
-            // 여러개 일 경우 배열로 작성
+            customButton : false,
             button : [
                 {
                     type : '',
@@ -31,155 +24,161 @@ class LayerPopup{
                     label : '',
                     event : '',
                 }
-            ],
-        }, options);
+            ]
+        }, parameters);
         
-        this.callback = callback || '';
-        this.init();
+        this.callback = callbackFunction || '';
+        this.createElement();
     }
 
-    init(){
-        this.create();
-    }
+    createElement(){
+        const {className, customButton, title, dim, expired, expireData}= this.options;
 
-    create(){
-        const { className, customButton, title, dim, expired, expireData } = this.options;
+        // 무조건 생성
+        this.wrap = createElement({
+            className : className + '_wrap'
+        });
 
-        // 기본
-        this.wrap = createElement({className : className + '_wrap'});
+        this.container = createElement({
+            className : className + '_container'
+        });
 
+        this.footer = createElement({
+            className : className + '_footer'
+        });
+
+        this.content = createElement({
+            tag : 'div', 
+            className : className + '_content'
+        });
+
+        this.buttonsWrap = createElement({
+            tag : 'div', 
+            className : className + '_buttons_wrap'
+        });
+
+        // 조건 생성
         if(title) {
-            this.header = createElement({className : className + '_header'});
+            this.header = createElement({
+                className : className + '_header'
+            });
+
+            this.title = createElement({
+                tag : 'p', 
+                className : 'title'
+            });
         }
 
-        this.container = createElement({className : className + '_container'});
-        this.footer = createElement({className : className + '_footer'});
-        this.content = createElement({tag : 'div', className : className + '_content'});
-        this.buttonsWrap = createElement({tag : 'div', className : className + '_buttons_wrap'});
-
-        // 버튼
         if(customButton){
             const that = this;
-            const { button } = this.options;
+            const {button} = this.options;
 
             if(button === ''){
-                // 기본 버튼
                 defaultButtons.call(this);
 
             }else if(Array.isArray(button) && button.length > 1){
-            // 버튼 여러개
-                console.log('여러개 생성',button);
-                
-                button.map((e) => {
-                    // console.log(123,type, className, label);
+                button.map(({type, className, label}) => {
                     let el = createElement.call(that, { 
                         tag : 'button', 
-                        type : e.type, 
-                        className : e.className, 
-                        label : e.label 
+                        type : type, 
+                        className : className, 
+                        label : label 
                     });
 
                     that.buttonsWrap.append(el);
                 });                
 
-            // 버튼 한개
             }else{
-                console.log('한개 생성',button);
-                let btn = (Array.isArray(button)) ? button[0] : button;
+                let btn = (Array.isArray(button)) 
+                    ? button[0] 
+                    : button;
+                const {btnType, btnClassName, btnLabel} = btn;
 
                 const el = createElement.call(this, { 
                     tag : 'button', 
-                    type : btn.type, 
-                    className : btn.className, 
-                    label : btn.label 
+                    type : btnType, 
+                    className : btnClassName, 
+                    label : btnLabel 
                 });
                 
                 this.buttonsWrap.append(el);
             }
 
         }else{
-            // 기본 버튼
             defaultButtons.call(this);
         }        
 
-        // 배경
         this.dim = document.querySelector('[data-type="dim"]');
         if(dim && !this.dim) {
-            this.dim = createElement({className : className + '_dim' });
+            this.dim = createElement({
+                className : className + '_dim' 
+            });
         }
 
-        // 타이틀
-        if(title !== ''){
-            this.title = createElement({tag : 'p', className : 'title'});
-        }
-
-        // 만료일 설정
         if(expired && expireData){
-            const { className } = this.options;
-            const commonClass = className + '_expire';
-            let box, btn, label;
+            const {className} = this.options;
+            const prefix = className + '_expire';
+            let expireBox, 
+                expireBtn, 
+                expireLabel;
 
             this.expireWrap = createElement.call(this,{
                 tag : 'div',
-                className : commonClass + '_wrap'
+                className : prefix + '_wrap'
             });
 
             if(Array.isArray(expireData)){
-                console.log('expireData 여러개 생성');
-
                 const that = this;
 
-                expireData.map((e) => {
-                    box = createElement.call(that, {
+                expireData.map(({className, id, date, label}) => {
+                    expireBox = createElement.call(that, {
                         tag : 'p', 
-                        className : commonClass + '_box'
+                        className : prefix + '_box'
                     });
                     
-                    btn = createElement.call(that, {
+                    expireBtn = createElement.call(that, {
                         tag : 'input',
                         type : 'checkbox', 
-                        name : commonClass + '_chk', 
-                        className : e.className, 
-                        id : e.id,
-                        label : e.date
+                        name : prefix + '_chk', 
+                        className : className, 
+                        id : id,
+                        label : date
                     });
 
-                    label = createElement.call(that,{
+                    expireLabel = createElement.call(that,{
                         tag : 'label',
-                        label : commonClass + '_label', 
-                        id : e.id,
-                        text : e.label
+                        label : prefix + '_label', 
+                        id : id,
+                        text : label
                     });
 
-                    box.append(btn, label);
-                    this.expireWrap.append(box);
+                    expireBox.append(expireBtn, expireLabel);
+                    this.expireWrap.append(expireBox);
                 });
 
             }else{
-                console.log('expireData 한개 생성');
-
-                box = createElement.call(this, {
+                expireBox = createElement.call(this, {
                     tag : 'p',
-                     className : commonClass + '_box'
+                     className : prefix + '_box'
                 });
 
-                btn = createElement.call(this,{
+                expireBtn = createElement.call(this,{
                     tag : 'input',
                     type : 'checkbox', 
-                    className : commonClass + '_chk', 
+                    className : prefix + '_chk', 
                     id : expireData.id,
                     label : expireData.date
                 });
 
-                label = createElement.call(this, {
+                expireLabel = createElement.call(this, {
                     tag : 'label',
-                    label : commonClass + '_label', 
+                    label : prefix + '_label', 
                     id : expireData.id,
                     text : expireData.label
                 });
 
-                box.append(btn, label);
-                this.expireWrap.append(box);
+                expireBox.append(expireBtn, expireLabel);
+                this.expireWrap.append(expireBox);
             }
         } // expired
 
@@ -206,38 +205,39 @@ class LayerPopup{
             label = '버튼', 
             text 
         }){
-
             const el = document.createElement(tag);
 
-            // 클래스
             if(className){
-                const classNames = className.split(',');
+                const splitClassName = className.split(',');
 
-                // 클래스가 여러개일 경우
-                if(classNames.length > 1){
-                    classNames.map((k) =>  el.classList.add(k));
+                if(splitClassName.length > 1){
+                    splitClassName.map(e =>  el.classList.add(e));
 
                 }else{
                     el.classList.add(className);
                 }
             }
 
-            // 네임
             if(name){
                 el.name = name;
             }
 
-            // 아이디
             if(id && tag !== 'label'){
                 el.id = id;
             }
 
-            if(text){
+            if(tag === 'label' && text){
                 el.innerText = text;
             }
             
             if(tag === 'button'){
-                el.setAttribute('type', (type !== '') ? type : 'button');
+                el.setAttribute(
+                    'type', 
+                    (type !== '') 
+                        ? type 
+                        : 'button'
+                );
+
                 el.LayerPopup = this;
                 el.innerText = (label !== '') ? label : '버튼';
             }
@@ -251,7 +251,7 @@ class LayerPopup{
                     el.LayerPopup = this;
                 }
                 
-                if(tag === 'label'){
+                if(tag === 'label'){       
                     el.setAttribute('for', id);
                 }
             }
@@ -275,20 +275,27 @@ class LayerPopup{
             });
 
             this.buttonsWrap.append(this.done, this.cancel);
-            
         } // defaultButtons
-
     } // create
 
     setAttribute(){
-        const { dim } = this.options;
+        const {dim} = this.options;
         const otherPopup = findOtherPopup('[data-type="layerPopup"');
 
-        this.wrap.style.zIndex = (otherPopup) ? Number(otherPopup.style.zIndex) + 1 : 1000;
-        this.wrap.dataset.type = 'layerPopup';
+        this.wrap
+            .style
+            .zIndex = (otherPopup) 
+            ? Number(otherPopup.style.zIndex) + 1 
+            : 1000;
+
+        this.wrap
+            .dataset
+            .type = 'layerPopup';
 
         if(dim) {
-            this.dim.dataset.type = 'dim';
+            this.dim
+                .dataset
+                .type = 'dim';
         }
 
         function findOtherPopup(name){

@@ -62,7 +62,23 @@
     const popup2 = new LayerPopup({
         appendPosition : '.box2',
         title : '타이틀입니다.',
-        content : '내부내용입니다'
+        content : '내부내용입니다',
+        customButton : true,
+        button : [
+            {
+                    type : 'button',
+                    className : 'custom_button',
+                    label : '커스텀1',
+                    event : '',
+                },
+                {
+                    type : 'button',
+                    className : 'custom_button',
+                    label : '커스텀2',
+                    event : '',
+                }
+        ],
+        expired : true
         // title : titleElement(),
         // title : '<img src="https://s.pstatic.net/static/www/img/uit/2019/sp_search.svg" alt="아이콘">',
         // content : '<div style="color:red;">123</div>\n헤헤'

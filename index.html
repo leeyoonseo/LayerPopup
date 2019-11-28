@@ -25,7 +25,14 @@
 
 <script src="./assets/js/layerPopup.js"></script>
 <script>
-    const defaultPopup = new LayerPopup();
+    const defaultPopup = new LayerPopup({}, function(res){
+        if(res){
+            console.log('확인을 클릭하셨습니다.');
+
+        }else{
+            console.log('취소를 클릭하셨습니다.');
+        }
+    });
 
     document.getElementById('default').addEventListener('click', () => {
         defaultPopup.open();

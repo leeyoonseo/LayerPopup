@@ -15,18 +15,20 @@ class LayerPopup{
         this.options = Object.assign({}, {
             appendPosition : 'body', 
             className : 'popup', 
-            title : '타이틀',
-            content : '팝업 메세지를 입력해주세요.\n메세지는 텍스트나 객체도 가능합니다.',
+            title : 'title',
+            content : 'Message....',
             dim : true,
             
             expire : false,           
             expireData : {
                 date : 1,
                 id : 'day',
-                label : '하루간보지않기'
+                label : '하루동안 보지않기'
             },
 
             closeButton : true,
+            closeButtonLabel : 'x',
+
             customButton : false,
             button : [
                 {
@@ -44,16 +46,12 @@ class LayerPopup{
 
     // 레이어 팝업 객체 생성
     createElement(){
-        const {className, closeButton, customButton, title, dim, expire, expireData}= this.options;
+        const {className, closeButton, closeButtonLabel, customButton, title, dim, expire, expireData}= this.options;
 
         // 무조건 생성
         this.wrap = createElement({
             className : className + '_wrap'
-        });
-
-        this.header = createElement({
-            className : className + '_header'
-        });
+        });        
 
         this.container = createElement({
             className : className + '_container'
@@ -80,14 +78,21 @@ class LayerPopup{
                 className : className + '_title'
             });
         }
+
+        if(title || closeButton){
+            this.header = createElement({
+                className : className + '_header'
+            });
+        }
         
         if(closeButton){
+            const label = (closeButtonLabel !== '') ? closeButtonLabel : 'x';
+
             this.closeButton = createElement({
                 tag : 'button',
                 className : className + '_close',
-                label : 'x'
+                label : label
             });
-            console.log(closeButton,this.closeButton);
         }
 
         if(customButton){
@@ -195,7 +200,7 @@ class LayerPopup{
                     tag : 'label',
                     label : prefix + '_label', 
                     id : expireData.id,
-                    text : expireData.label
+                    text : closeButtonLabel
                 });
 
                 expireBox.append(expireBtn, expireLabel);
@@ -301,7 +306,7 @@ class LayerPopup{
             });
 
             this.buttonsWrap.append(this.done, this.cancel);
-        } // defaultButtons
+        }
     } // create
 
     // 객체 속성 부여
@@ -361,8 +366,11 @@ class LayerPopup{
             this.header.append(this.closeButton);
         }
 
+        if(this.header){
+            this.wrap.append(this.header); 
+        }
+        
         this.wrap.append(
-            this.header, 
             this.container, 
             this.footer
         );
@@ -496,7 +504,11 @@ class LayerPopup{
         const {expire, expireData} = options;
 
         if(LayerPopup.callback && LayerPopup.callback !== ''){
-            let result = (target.classList.value === 'done') ? true : false;
+            const btnClass = target.classList.value;
+            let result = (btnClass.search('done') > 0) 
+                ? true 
+                : false;
+
             LayerPopup.callback(result);
         }
 

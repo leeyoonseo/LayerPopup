@@ -15,140 +15,87 @@
     <section>
         <h2>예제</h2>
         <!-- 1 default -->
-        <div>
+        <div class="exm_box">
             <h3>기본 기능</h3>
             <button type="button" id="default" class="trigger">Click</button>
         </div>
 
         <!-- 2 edit -->
-        <div>
+        <div class="exm_box">
             <h3>문구 수정 기능</h3>
             <button type="button" id="edit" class="trigger">Click</button>
         </div>
 
         <!-- 3 append-->
-        <div>
+        <div class="exm_box">
             <h3>일정 영역에 팝업 삽입</h3>
             <div class="append_box"></div>
             <button type="button" id="append" class="trigger">Click</button>
         </div>
 
+        <!-- 4 nonDim -->
+        <div class="exm_box">
+            <h3>Dim 해제</h3>
+            <button type="button" id="nonDim" class="trigger">Click</button>
+        </div>
+
+        <!-- 5 expire -->
+        <div class="exm_box">
+            <h3>만료일 설정</h3>
+            <div>
+                <h4>기본</h4>
+                <button type="button" id="expire" class="trigger">Click</button>
+            </div>
+            <div>
+                <h4>하나의 옵션</h4>
+                <button type="button" id="expire_btn" class="trigger">Click</button>
+            </div>
+            <div>
+                <h4>여러개의 옵션</h4>
+                <button type="button" id="expire_btns" class="trigger">Click</button>
+            </div>
+        </div>
+
+        <!-- 6 customButton -->
+        <div class="exm_box">
+            <h3>커스텀 버튼</h3>
+            <div>
+                <h4>버튼 하나</h4>
+                <button type="button" id="custom_btn" class="trigger">Click</button>
+            </div>            
+            <div>
+                <h4>버튼 여러개</h4>
+                <button type="button" id="custom_btns" class="trigger">Click</button>
+            </div>
+            <div>
+                <h4>버튼 옵션 전체</h4>
+                <button type="button" id="custom" class="trigger">Click</button>
+            </div>
+        </div>
+
+        <!-- 7 closeButton -->
+        <div class="exm_box">
+            <h3>x버튼 수정</h3>
+            <div>
+                <h4>수정</h4>
+                <button type="button" id="close_btn_modify" class="trigger">Click</button>
+            </div>
+            <div>
+                <h4>삭제</h4>
+                <button type="button" id="close_btn_remove" class="trigger">Click</button>
+            </div>
+        </div>
+
+        <!-- 8 callback -->
+        <div class="exm_box">
+            <h3>콜백함수 이용하기</h3>
+            <button type="button" id="callback" class="trigger">Click</button>
+        </div>
+
+
     </section>
 
 <script src="./assets/js/layerPopup.js"></script>
-<script>
-    
-    // 1
-    const defaultPopup = new LayerPopup();
-    document.getElementById('default').addEventListener('click', () => {
-        defaultPopup.open();
-    });
-
-    // 2
-    const EditPopup = new LayerPopup({
-         title : '알림',
-         content : '오늘은 문화가 있는 수요일입니다.\n롯데시네마, CGV : 오후 5시~9시까지 5,000원에 영화를 관람할 수 있습니다.'
-    });
-    document.getElementById('edit').addEventListener('click', () => {
-        EditPopup.open();
-    });
-
-    // 3
-    const appendPopup = new LayerPopup({
-        appendPosition : '.append_box'
-    });
-    document.getElementById('append').addEventListener('click', () => {
-        appendPopup.open();
-    });
-    
-
-    // 
-    const callbackPopup = new LayerPopup({}, function(res){
-        if(res){
-            console.log('확인을 클릭하셨습니다.');
-
-        }else{
-            console.log('취소를 클릭하셨습니다.');
-        }
-    });
-
-    
-
-    
-
-
-
-
-    // 3
-
-
-
-
-    // const open1 = document.querySelector('#open');
-    // const open2 = document.querySelector('#open2');
-    // var popup = new LayerPopup({
-    //     appendPosition : '.box',
-    //     title : '팝업1',
-    // });
-
-    // function contentElement(){
-    //     const child = document.createElement('p');
-    //     child.innerText = '나는 child다';
-
-    //     const wrap = document.createElement('div')
-    //     wrap.append(child);
-
-    //     return wrap;
-    // }
-
-    // function titleElement(){
-    //     const img = document.createElement('img');
-    //     img.src = 'https://s.pstatic.net/static/www/img/uit/2019/sp_search.svg';
-        
-    //     const wrap = document.createElement('div')
-    //     wrap.append(img);
-
-    //     return wrap;
-    // }
-      
-    // const popup2 = new LayerPopup({
-    //     appendPosition : '.box2',
-    //     title : '타이틀입니다.',
-    //     content : '내부내용입니다',
-    //     customButton : true,
-    //     button : [
-    //         {
-    //                 type : 'button',
-    //                 className : 'custom_button',
-    //                 label : '커스텀1',
-    //                 event : '',
-    //             },
-    //             {
-    //                 type : 'button',
-    //                 className : 'custom_button',
-    //                 label : '커스텀2',
-    //                 event : '',
-    //             }
-    //     ],
-    //     expired : true
-    //     // title : titleElement(),
-    //     // title : '<img src="https://s.pstatic.net/static/www/img/uit/2019/sp_search.svg" alt="아이콘">',
-    //     // content : '<div style="color:red;">123</div>\n헤헤'
-    //     // content : contentElement()
-
-    // }, function(isState){
-    //     if(isState){
-    //         // 기본 확인 클릭
-
-    //     }else{
-    //         // 기본 취소 클릭
-            
-    //     }
-    // });
-
-    // open1.addEventListener('click', () => {
-    //     popup2.open();
-    // });
-</script>
+<script src="./assets/js/index.js"></script>
 </body>
 </html>

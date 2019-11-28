@@ -11,8 +11,9 @@ class LayerPopup{
      */
     constructor(parameters, callbackFunction){
         this.name = "LayerPopup";
+        console.log(typeof parameters);
 
-        this.options = Object.assign({}, {
+        this.options = {
             appendPosition : 'body', 
             className : 'popup', 
             title : 'title',
@@ -23,7 +24,7 @@ class LayerPopup{
             expireData : {
                 date : 1,
                 id : 'day',
-                label : '하루동안 보지않기'
+                label : '하루동안보지않기'
             },
 
             closeButton : true,
@@ -38,15 +39,28 @@ class LayerPopup{
                     event : '',
                 }
             ]
-        }, parameters);
+        };
+
+        if(typeof parameters === 'object'){
+            this.options = Object.assign({}, this.options, parameters);
+            this.callback = callbackFunction || '';
+
+        }else if(typeof parameters === 'function'){
+            this.callback = parameters;
+
+        }else{
+            console.log('error : 옵션 값을 확인해주세요.');
+            return false;
+        }
         
-        this.callback = callbackFunction || '';
         this.createElement();
     }
 
     // 레이어 팝업 객체 생성
     createElement(){
-        const {className, closeButton, closeButtonLabel, customButton, title, dim, expire, expireData}= this.options;
+        const {
+            className, closeButton, closeButtonLabel, customButton, title, dim, expire, expireData
+        }= this.options;
 
         // 무조건 생성
         this.wrap = createElement({
@@ -86,12 +100,10 @@ class LayerPopup{
         }
         
         if(closeButton){
-            const label = (closeButtonLabel !== '') ? closeButtonLabel : 'x';
-
             this.closeButton = createElement({
                 tag : 'button',
                 className : className + '_close',
-                label : label
+                label : (closeButtonLabel !== '') ? closeButtonLabel : 'x'
             });
         }
 
@@ -103,28 +115,33 @@ class LayerPopup{
                 defaultButtons.call(this);
 
             }else if(Array.isArray(button) && button.length > 1){
-                button.map(({type, className, label}) => {
+                button.map(e => {
+                    let key = this.getRandomNumber();
+                    e.key = key;
+
                     let el = createElement.call(that, { 
                         tag : 'button', 
-                        type : type, 
-                        className : className, 
-                        label : label 
+                        type : e.type, 
+                        className : (e.className) ? e.className : key,                         
+                        label : e.label 
                     });
 
                     that.buttonsWrap.append(el);
                 });                
 
             }else{
+                const key = this.getRandomNumber();
                 let btn = (Array.isArray(button)) 
                     ? button[0] 
                     : button;
-                const {btnType, btnClassName, btnLabel} = btn;
-
+                const {type, className, label} = btn;
+                btn.key = key;
+                
                 const el = createElement.call(this, { 
                     tag : 'button', 
-                    type : btnType, 
-                    className : btnClassName, 
-                    label : btnLabel 
+                    type : type, 
+                    className : (className) ? className : key, 
+                    label : label 
                 });
                 
                 this.buttonsWrap.append(el);
@@ -162,7 +179,7 @@ class LayerPopup{
                         tag : 'p', 
                         className : prefix + '_box'
                     });
-                    
+
                     expireBtn = createElement.call(that, {
                         tag : 'input',
                         type : 'checkbox', 
@@ -201,7 +218,7 @@ class LayerPopup{
                     tag : 'label',
                     label : prefix + '_label', 
                     id : expireData.id,
-                    text : closeButtonLabel
+                    text : expireData.label
                 });
 
                 expireBox.append(expireBtn, expireLabel);
@@ -269,7 +286,7 @@ class LayerPopup{
                 el.innerText = text;
             }
             
-            if(tag === 'button'){
+            if(tag === 'button'){                
                 el.setAttribute('type', (type !== '') ? type : 'button');
                 el.LayerPopup = this;
                 el.innerText = (label !== '') ? label : '버튼';
@@ -428,14 +445,15 @@ class LayerPopup{
 
             }else if(buttons.length > 1){
                 Array.from(buttons).map(el => {
-                    button.find(({className, event}) => {
-                        if(event === ''){
-                            console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
-                            event = that.handleDefaultClick;
-                        }
+                    button.find((e) => {
+                        if(e.event && typeof e.event === 'function'){
+                            if(el.className === e.key || el.className === e.className){
+                                el.addEventListener('click', e.event);
+                            }
 
-                        if(el.className === className){
-                            el.addEventListener('click', event);
+                        }else{
+                            console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
+                            e.event = that.handleDefaultClick;
                         }
                     });
                 });
@@ -445,7 +463,8 @@ class LayerPopup{
                     ? button[0].event 
                     : button.event;
 
-                if(!event || event === ''){
+
+                if(!event || typeof event !== 'function' || event === ''){
                     console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
                     event = this.handleDefaultClick;
                 }
@@ -532,15 +551,21 @@ class LayerPopup{
     // 만료일 설정
     handleExpire(day){        
         const { className } = this.options;
-        let i = 0;
-        let randomNumber = new Date().getMinutes();
+        let randomNumber = this.getRandomNumber();
         
-        for(; i < 4; i++){
-            randomNumber += String(Math.floor(Math.random() * 9));  
-        }
-
         this.uniqueName = className + randomNumber;
         this.setCookie(this.uniqueName, day);
+    }
+
+    getRandomNumber(){
+        let num = new Date().getMinutes();
+
+        let i = 0;
+        for(; i < 4; i++){
+            num += String(Math.floor(Math.random() * 9));  
+        }
+
+        return num;
     }
 
     // 쿠키 세팅

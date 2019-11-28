@@ -37,7 +37,7 @@ parameters | type | default | description //표 제목
 4. content | String or Object | '팝업 메세지를 입력해...' | 팝업 내용 텍스트 및 객체
 5. dim | Boolean | true | 배경화면 셋팅 여부
 == 만료일 설정
-6. expired | Boolean | false | 만료일 설정 여부
+6. expire | Boolean | false | 만료일 설정 여부
 7. expireData | Object
 date | Number | 1 | 만료 날짜 값
 id | String | 'day' | 만료 체크박스 id

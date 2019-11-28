@@ -26,6 +26,7 @@ class LayerPopup{
                 label : '하루간보지않기'
             },
 
+            closeButton : true,
             customButton : false,
             button : [
                 {
@@ -43,11 +44,15 @@ class LayerPopup{
 
     // 레이어 팝업 객체 생성
     createElement(){
-        const {className, customButton, title, dim, expire, expireData}= this.options;
+        const {className, closeButton, customButton, title, dim, expire, expireData}= this.options;
 
         // 무조건 생성
         this.wrap = createElement({
             className : className + '_wrap'
+        });
+
+        this.header = createElement({
+            className : className + '_header'
         });
 
         this.container = createElement({
@@ -70,14 +75,19 @@ class LayerPopup{
 
         // 조건 생성
         if(title) {
-            this.header = createElement({
-                className : className + '_header'
-            });
-
             this.title = createElement({
                 tag : 'p', 
-                className : 'title'
+                className : className + '_title'
             });
+        }
+        
+        if(closeButton){
+            this.closeButton = createElement({
+                tag : 'button',
+                className : className + '_close',
+                label : 'x'
+            });
+            console.log(closeButton,this.closeButton);
         }
 
         if(customButton){
@@ -227,6 +237,7 @@ class LayerPopup{
             label = '버튼', 
             text 
         }){
+
             const el = document.createElement(tag);
 
             if(className){
@@ -332,7 +343,7 @@ class LayerPopup{
 
     // 레이어팝업 객체 삽입
     layoutAppend(){
-        const {appendPosition, title, dim, expire, expireData} = this.options;
+        const {appendPosition, title, dim, closeButton, expire, expireData} = this.options;
 
         this.container.append(this.content);
         
@@ -344,15 +355,17 @@ class LayerPopup{
 
         if(title){
             this.header.append(this.title);
-            this.wrap.append(
-                this.header, 
-                this.container, 
-                this.footer
-            );
-
-        }else{
-            this.wrap.append(this.container, this.footer);
         }
+
+        if(closeButton){
+            this.header.append(this.closeButton);
+        }
+
+        this.wrap.append(
+            this.header, 
+            this.container, 
+            this.footer
+        );
         
         this.setContent();
         this.attachEvent();
@@ -392,8 +405,14 @@ class LayerPopup{
     // 이벤트 바인딩
     attachEvent(){
         const that = this;
-        const {customButton, button, expire, expireData} = this.options;
+        const {closeButton, customButton, button, expire, expireData} = this.options;
         const buttons = this.buttonsWrap.childNodes;        
+
+        if(closeButton){
+            this.closeButton.addEventListener('click', () => {
+                this.close();
+            });
+        }
 
         if(customButton){
             if(button === ''){
@@ -570,8 +589,8 @@ class LayerPopup{
             resetChecked();
 
             function resetChecked(){
-                const expire = expireWrap.childNodes;
-                Array.from(expire).map(({childNodes}) => {
+                const child = expireWrap.childNodes;
+                Array.from(child).map(({childNodes}) => {
                     Array.from(childNodes).map(e => {
                         if(e.tagName.toLowerCase() === 'input' && e.checked){
                             e.checked = false;

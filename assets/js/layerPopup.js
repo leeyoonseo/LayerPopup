@@ -135,6 +135,7 @@ class LayerPopup{
         }        
 
         this.dim = document.querySelector('[data-type="dim"]');
+
         if(dim && !this.dim) {
             this.dim = createElement({
                 className : className + '_dim' 
@@ -313,25 +314,27 @@ class LayerPopup{
     setAttribute(){
         const {dim} = this.options;
         const {style, dataset} = this.wrap;
-        const length = getLength('[data-type="layerPopup"]');
 
-        style.zIndex = 1000 + length;
+        style.zIndex = 1000;
+        // const length = getLength('[data-type="layerPopup"].on');
+
+        // style.zIndex = 1000 + length;
         dataset.type = 'layerPopup';
 
         if(dim) {
             this.dim.dataset.type = 'dim';
         }
 
-        /**
-         * name에 해당하는 객체의 length 리턴
-         * @param {String} name - 찾으려는 객체의 id, class, tagName
-         * @return {Number} 타겟의 length
-         */
-        function getLength(name){
-            return document
-                        .querySelectorAll(name)
-                        .length;
-        }
+        // /**
+        //  * name에 해당하는 객체의 length 리턴
+        //  * @param {String} name - 찾으려는 객체의 id, class, tagName
+        //  * @return {Number} 타겟의 length
+        //  */
+        // function getLength(name){
+        //     return document
+        //                 .querySelectorAll(name)
+        //                 .length;
+        // }
     }
 
     // 레이어팝업 객체 삽입
@@ -551,7 +554,7 @@ class LayerPopup{
     // 쿠키 가져오기
     getCookie(name){
         var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
-        return value? value[2] : null;
+        return value ? value[2] : null;
     }
 
     // 팝업 열기
@@ -560,6 +563,7 @@ class LayerPopup{
             console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
+            setZindex();
             const {dim} = this.options; 
 
             if(dim && this.dim) {
@@ -567,6 +571,17 @@ class LayerPopup{
             }
             
             this.wrap.classList.add('on');
+
+            // zindex 설정
+            function setZindex(){
+                const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
+
+                if(otherPopup){
+                    if(!this.wrap.classList.contains('on')){
+                        this.wrap.style.zIndex =  Number(this.wrap.style.zIndex) + Number(otherPopup.length);
+                    }
+                }
+            }
         }
     }
 
@@ -575,16 +590,16 @@ class LayerPopup{
         const {expireWrap} = this;
         const {dim, expire, expireData} = this.options;
 
+        this.wrap.style.zIndex = 1000;
         this.wrap.classList.remove('on');
 
         if(dim && this.dim) {
             const layer = document.querySelectorAll('[data-type="layerPopup"]');
-            const reg = /on/;
             let i = 0;
 
             // 팝업이 여러개일때 딤처리
             Array.from(layer).map(({classList}) => {
-                if(!reg.test(classList.value)){
+                if(!classList.contains('on')){
                     i ++;
                 }
             });

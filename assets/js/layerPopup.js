@@ -563,7 +563,7 @@ class LayerPopup{
             console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
-            setZindex();
+            setZindex.call(this);
             const {dim} = this.options; 
 
             if(dim && this.dim) {

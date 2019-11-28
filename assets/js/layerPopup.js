@@ -312,37 +312,25 @@ class LayerPopup{
     // 객체 속성 부여
     setAttribute(){
         const {dim} = this.options;
-        const otherPopup = findOtherPopup('[data-type="layerPopup"');
+        const {style, dataset} = this.wrap;
+        const length = getLength('[data-type="layerPopup"]');
 
-        this.wrap
-            .style
-            .zIndex = (otherPopup) 
-            ? Number(otherPopup.style.zIndex) + 1 
-            : 1000;
-
-        this.wrap
-            .dataset
-            .type = 'layerPopup';
+        style.zIndex = 1000 + length;
+        dataset.type = 'layerPopup';
 
         if(dim) {
-            this.dim
-                .dataset
-                .type = 'dim';
+            this.dim.dataset.type = 'dim';
         }
 
         /**
-         * name에 해당하는 객체 찾기
+         * name에 해당하는 객체의 length 리턴
          * @param {String} name - 찾으려는 객체의 id, class, tagName
-         * @return {Object, Boolean} 타겟이 있으면 타겟 객체, 없으면 false 
+         * @return {Number} 타겟의 length
          */
-        function findOtherPopup(name){
-            const target = document.querySelector(name);
-            
-            if(target){
-                return target;
-            }
-
-            return false;
+        function getLength(name){
+            return document
+                        .querySelectorAll(name)
+                        .length;
         }
     }
 
@@ -378,7 +366,16 @@ class LayerPopup{
         this.setContent();
         this.attachEvent();
 
-        document.querySelector(appendPosition).append(this.wrap);
+        if(appendPosition !== ''){
+            let target = document.querySelector(appendPosition); 
+            if(target === '' || !target) {
+                target = document.querySelector('body');
+            }
+
+            target.append(this.wrap);
+        }
+
+
         if(dim && this.dim) document.body.append(this.dim);
     }
 

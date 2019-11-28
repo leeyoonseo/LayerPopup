@@ -43,8 +43,10 @@ date | Number | 1 | 만료 날짜 값
 id | String | 'day' | 만료 체크박스 id
 label | String | '하루간보지않기' | 만료 체크박스 label
 === 버튼 설정
-8. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
-9. button | Object or Array | 
+8. closeButton | Boolean | true | 창 닫기 버튼 여부
+9. closeButtonLabel | String | 'x' | 창 닫기 버튼 텍스트 
+10. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
+11. button | Object or Array | 
 type | String | '' | 버튼 타입
 className | String | '' | 버튼 class
 label | String | '' | 버튼 label

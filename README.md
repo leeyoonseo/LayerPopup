@@ -34,6 +34,7 @@ parameters | type | default | description //표 제목
 1. appendPosition | String | 'body' | id or class or tagName
 2. className | String | 'popup' | 셋팅 class명
 3. title | String or Object | '타이틀' | 팝업 타이틀 텍스트 및 객체
+br이나 \n로 줄바꿈 가능
 4. content | String or Object | '팝업 메세지를 입력해...' | 팝업 내용 텍스트 및 객체
 5. dim | Boolean | true | 배경화면 셋팅 여부
 == 만료일 설정
@@ -44,9 +45,12 @@ id | String | 'day' | 만료 체크박스 id
 label | String | '하루간보지않기' | 만료 체크박스 label
 === 버튼 설정
 8. closeButton | Boolean | true | 창 닫기 버튼 여부
-9. closeButtonLabel | String | 'x' | 창 닫기 버튼 텍스트 
-10. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
-11. button | Object or Array | 
+9. closeButtondata | Object 
+label | String | 'x' | 버튼 텍스트
+imgSrc | String | '' | 버튼 이미지 사용 시 url
+10. defaultButton | Boolean | true | 하단 버튼 사용 여부
+11. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
+12. customButtonData | Object or Array | 
 type | String | '' | 버튼 타입
 className | String | '' | 버튼 class
 label | String | '' | 버튼 label
@@ -95,3 +99,7 @@ callbackFunction | Function | 기본 버튼에서 확인, 취소 클릭 시 콜�
 </pre>
 
 // readme 참고 https://swiperjs.com/api/
+
+prefix로 선언 시 className한 것이 들어감
+on 클래스 삽입되므로 css에서 제어할 것
+

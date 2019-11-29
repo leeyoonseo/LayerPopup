@@ -48,7 +48,7 @@ label | String | '하루간보지않기' | 만료 체크박스 label
 9. closeButtondata | Object 
 label | String | 'x' | 버튼 텍스트
 imgSrc | String | '' | 버튼 이미지 사용 시 url
-10. defaultButton | Boolean | true | 하단 버튼 사용 여부
+10. button | Boolean | true | 하단 버튼 사용 여부
 11. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
 12. customButtonData | Object or Array | 
 type | String | '' | 버튼 타입

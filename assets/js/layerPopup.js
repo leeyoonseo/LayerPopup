@@ -16,7 +16,7 @@ class LayerPopup{
             appendPosition : 'body', 
             className : 'popup', 
             title : 'title',
-            content : 'Message....',
+            content : 'please write your message...',
             dim : true,
             
             expire : false,           
@@ -28,7 +28,7 @@ class LayerPopup{
 
             closeButton : true,
             closeButtonData : {
-                imgSrc : '',
+                src : '',
                 label : 'x'
             },
 
@@ -59,12 +59,20 @@ class LayerPopup{
         }
         
         this.createElement();
-    }
+    }   
 
     // 레이어 팝업 객체 생성
     createElement(){
         const {
-            className, closeButton, closeButtonData, button, customButton, title, dim, expire, expireData
+            className, 
+            closeButton, 
+            closeButtonData, 
+            button, 
+            customButton,
+            title, 
+            dim, 
+            expire, 
+            expireData
         } = this.options;
 
         // 무조건 생성
@@ -90,6 +98,12 @@ class LayerPopup{
             });
         }
 
+        if(title || closeButton){
+            this.header = createElement({
+                className : className + '_header'
+            });
+        }
+
         if(title) {
             this.title = createElement({
                 tag : 'p', 
@@ -97,29 +111,31 @@ class LayerPopup{
             });
         }
 
-        if(title || closeButton){
-            this.header = createElement({
-                className : className + '_header'
-            });
-        }
-
         if(closeButton){
-            const closeLabel = (closeButtonData.label === '') ? 'x' : closeButtonData.label;
+            const closeLabel = (closeButtonData.label === '') 
+                ? 'x' 
+                : closeButtonData.label;
 
             this.closeButton = createElement({
                 tag : 'button',
                 className : className + '_close',
                 label : closeLabel,
-                imgSrc : closeButtonData.imgSrc
+                src : closeButtonData.src
             });
         }
 
-        if(button){
+        if(button || expire){
             this.buttonsWrap = createElement({
                 tag : 'div', 
                 className : className + '_buttons_wrap'
             });
 
+            this.footer = createElement({
+                className : className + '_footer'
+            });
+        }
+
+        if(button){
             if(customButton){
                 const that = this;
                 const {customButtonData} = this.options;
@@ -136,7 +152,7 @@ class LayerPopup{
                             tag : 'button', 
                             type : e.type, 
                             className : (e.className) ? e.className : key,                         
-                            label : e.label 
+                            label : e.label
                         });
     
                         that.buttonsWrap.append(el);
@@ -147,14 +163,14 @@ class LayerPopup{
                     let btn = (Array.isArray(customButtonData)) 
                         ? customButtonData[0] 
                         : customButtonData;
-                    const {type, className, label} = btn;
+                    const {type, className, label, event} = btn;
                     btn.key = key;
-    
+
                     const el = createElement.call(this, { 
                         tag : 'button', 
                         type : type, 
                         className : (className) ? className : key, 
-                        label : label 
+                        label : label
                     });
                     
                     this.buttonsWrap.append(el);
@@ -164,12 +180,6 @@ class LayerPopup{
                 defaultButtons.call(this);
             }
         }
-
-        if(button || expire){
-            this.footer = createElement({
-                className : className + '_footer'
-            });
-        }        
 
         if(expire && expireData){
             const {className} = this.options;
@@ -270,8 +280,8 @@ class LayerPopup{
             name, 
             type = 'button', 
             label = '버튼', 
-            imgSrc,
-            text 
+            src,
+            text
         }){
 
             const el = document.createElement(tag);
@@ -303,9 +313,10 @@ class LayerPopup{
                 el.setAttribute('type', (type !== '') ? type : 'button');
                 el.LayerPopup = this;
                 el.innerText = (label !== '') ? label : '버튼';
-
-                if(imgSrc && imgSrc !== ''){
-                    el.style.backgroundImage = 'url(' + imgSrc + ')';
+                
+                if(src && src !== ''){
+                    el.style.backgroundImage = 'url(' + src + ')';
+                    el.classList.add('bg');
                 }
             }
 
@@ -331,13 +342,13 @@ class LayerPopup{
                 tag : 'button', 
                 className : className + '_button_done', 
                 type : 'submit',
-                label : '확인'
+                label : 'confirm'
             });
 
             this.cancel = createElement.call(this, {
                 tag : 'button', 
                 className : className + '_button_cancel', 
-                label : '취소'
+                label : 'cancel'
             });
 
             this.buttonsWrap.append(this.done, this.cancel);
@@ -350,28 +361,14 @@ class LayerPopup{
         const {style, dataset} = this.wrap;
 
         style.zIndex = 1000;
-        // const length = getLength('[data-type="layerPopup"].on');
-
-        // style.zIndex = 1000 + length;
         dataset.type = 'layerPopup';
 
         if(dim) {
             this.dim.dataset.type = 'dim';
         }
-
-        // /**
-        //  * name에 해당하는 객체의 length 리턴
-        //  * @param {String} name - 찾으려는 객체의 id, class, tagName
-        //  * @return {Number} 타겟의 length
-        //  */
-        // function getLength(name){
-        //     return document
-        //                 .querySelectorAll(name)
-        //                 .length;
-        // }
     }
 
-    // 레이어팝업 객체 삽입
+    // 레이어팝업 객체 삽입, 순서 변경되면 안됨
     layoutAppend(){
         const {appendPosition, title, dim, closeButton, button, expire, expireData} = this.options;
 
@@ -389,7 +386,7 @@ class LayerPopup{
             this.footer.append(this.expireWrap);
         }
 
-        if(button){
+        if(button || expire){
             this.footer.append(this.buttonsWrap);
         }
 
@@ -399,7 +396,7 @@ class LayerPopup{
 
         this.wrap.append(this.container); 
 
-        if(button){
+        if(button || expire){
             this.wrap.append(this.footer); 
         }
         
@@ -453,6 +450,7 @@ class LayerPopup{
     attachEvent(){
         const that = this;
         const {closeButton, customButton, button, customButtonData, expire, expireData} = this.options;
+
         if(closeButton){
             this.closeButton.addEventListener('click', () => {
                 this.close();
@@ -460,18 +458,19 @@ class LayerPopup{
         }
 
         if(button){
-            const buttons = this.buttonsWrap.childNodes;        
+            const buttonNodes = this.buttonsWrap.childNodes;        
 
             if(customButton){
                 if(customButtonData === ''){
                     defaultButtonCaller.call(this);
     
                 }else if(customButtonData.length > 1){
-                    Array.from(buttons).map(el => {
+                    Array.from(buttonNodes).map(el => {
                         customButtonData.find((e) => {
                             if(e.event && typeof e.event === 'function'){
                                 if(el.className === e.key || el.className === e.className){
                                     el.addEventListener('click', e.event);
+                                    el.event = e.event;
                                 }
     
                             }else{
@@ -480,51 +479,74 @@ class LayerPopup{
                             }
                         });
                     });
-    
+
                 }else{
-                    let event = (Array.isArray(customButtonData))
-                        ? customButtonData[0].event 
-                        : customButtonData.event;
-    
+                    let event = customButtonData.event
+                    let button = buttonNodes;
+
+                    if(Array.isArray(customButtonData)){
+                        event = customButtonData[0].event;
+                        button = buttonNodes[0];
+                    }
     
                     if(!event || typeof event !== 'function' || event === ''){
                         console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
                         event = this.handleDefaultClick;
                     }
-    
-                    buttons[0].addEventListener('click', event);
+                    
+                    button.event = event;
+                    button.addEventListener('click', event);
                 }
-    
+                
             }else{
                 defaultButtonCaller.call(this);
             }
-        }
-                
-        if(expire && expireData){
-            const expireBox = this.expireWrap.childNodes;
-
-            if(expireBox.length > 1){
-                Array.from(expireBox).map(({childNodes}) => {
-                    Array.from(childNodes).find(e => {
-                        if(e.tagName.toLowerCase() === 'input'){
-                            e.addEventListener('click', handleCheckbox);
-                        }
-                    });
-                });
-
-                function handleCheckbox({ target }){
-                    const expire = this.LayerPopup.expireWrap.childNodes;
-
-                    Array.from(expire).map(({childNodes}) => {
+        
+            if(expire && expireData){
+                const expireBox = this.expireWrap.childNodes;
+    
+                if(expireBox.length > 1){
+                    Array.from(expireBox).map(({childNodes}) => {
                         Array.from(childNodes).find(e => {
-                            if(e.tagName.toLowerCase() === 'input' && e.id !== target.id) {
-                                e.checked = false;
+                            if(e.tagName.toLowerCase() === 'input'){
+                                e.addEventListener('click', handleCheckbox);
                             }
                         });
                     });
+    
+                    function handleCheckbox({ target }){
+                        const expire = this.LayerPopup.expireWrap.childNodes;
+    
+                        Array.from(expire).map(({childNodes}) => {
+                            Array.from(childNodes).find(e => {
+                                if(e.tagName.toLowerCase() === 'input' && e.id !== target.id) {
+                                    e.checked = false;
+                                }
+                            });
+                        });
+                    }
                 }
             }
-        } // expired
+        }else{
+            if(expire && expireData){
+                if(expireData.length > 1) {
+                    return false;
+                }
+                
+                const expireBox = this.expireWrap.childNodes;
+                
+                Array.from(expireBox[0].childNodes).map((el) => {
+                    el.addEventListener('click', ({target}) => {
+                        if(target.tagName.toLowerCase() === 'input'){
+                            that.handleExpire(target.value);
+                            that.close();
+                        }
+                        
+                    });
+                });
+                
+            }
+        }
 
         // 기본 버튼 이벤트 호출러
         function defaultButtonCaller(){
@@ -535,6 +557,7 @@ class LayerPopup{
 
                 Array.from(buttons).map(el => {
                     el.addEventListener('click', that.handleDefaultClick);
+                    el.event = that.handleDefaultClick;
                 });
             }
         }
@@ -614,9 +637,9 @@ class LayerPopup{
             console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
-            setZindex.call(this);
             const {dim} = this.options; 
-
+            setZindex.call(this);
+            
             if(dim && this.dim) {
                 this.dim.classList.add('on');
             }
@@ -677,19 +700,45 @@ class LayerPopup{
         }
     }
 
-    // [TODO] remove, dettachEvent.. 할당했던거 다 지울것!!
-    // remove(){
-    //     this.wrap.remove();
-    //     this.dim.remove();
-    // }
+    remove(){
+        const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
 
-    // dettachEvent(){
-    //     console.log('dettachEvent');
-    //     const that = this;
-    //     const buttons = this.buttonsWrap.childNodes;
+        if(otherPopup){
+        
+            this.dim.remove();
+            
+        }
 
-    //     Array.from(buttons).map(el => {
-    //         el.removeEventListener('click', that.handleDefaultClick);
-    //     });
-    // }
+        this.dettachEvent();
+
+        this.wrap.remove();
+
+
+
+        
+        this.name,
+        this.options,
+        this.callback,
+        this.dim,
+        this.wrap,
+        this.header,
+        this.container,
+        this.footer,
+        this.content,
+        this.title,
+        this.closeButton,
+        this.buttonsWrap,
+        this.done,
+        this.cancel,
+        this.expireWrap,
+        this.uniqueName = null;
+    }
+    
+    dettachEvent(){
+        const buttonNodes = this.buttonsWrap.childNodes;
+            
+        Array.from(buttonNodes).map(el => {
+            el.removeEventListener('click', el.event);
+        });
+    }
 }

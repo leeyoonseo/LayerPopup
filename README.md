@@ -36,21 +36,22 @@ parameters | type | default | description //표 제목
 3. title | String or Object | '타이틀' | 팝업 타이틀 텍스트 및 객체
 br이나 \n로 줄바꿈 가능
 4. content | String or Object | '팝업 메세지를 입력해...' | 팝업 내용 텍스트 및 객체
-5. dim | Boolean | true | 배경화면 셋팅 여부
+5. button | Boolean | true | 하단 버튼 사용 여부
+6. dim | Boolean | true | 배경화면 셋팅 여부
+7. scroll | Boolean | true | dim 스크롤 여부
 == 만료일 설정
-6. expire | Boolean | false | 만료일 설정 여부
-7. expireData | Object
+8. expire | Boolean | false | 만료일 설정 여부
+9. expireData | Object
 date | Number | 1 | 만료 날짜 값
 id | String | 'day' | 만료 체크박스 id
 label | String | '하루간보지않기' | 만료 체크박스 label
 === 버튼 설정
-8. closeButton | Boolean | true | 창 닫기 버튼 여부
-9. closeButtondata | Object 
+10. closeButton | Boolean | true | 창 닫기 버튼 여부
+11. closeButtondata | Object 
 label | String | 'x' | 버튼 텍스트
 imgSrc | String | '' | 버튼 이미지 사용 시 url
-10. button | Boolean | true | 하단 버튼 사용 여부
-11. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
-12. customButtonData | Object or Array | 
+12. customButton | Boolean | false | 버튼 추가하여 사용 여부(true일 경우 기본 버튼 사용안함)
+13. customButtonData | Object or Array | 
 type | String | '' | 버튼 타입
 className | String | '' | 버튼 class
 label | String | '' | 버튼 label

@@ -21,13 +21,13 @@
 
     <section>
         <h2>Layer Popup Demos</h2>
-        <!-- 1 default -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>Default</h3>
+            <h3>옵션없음</h3>
             <button type="button" id="default" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
 const popup = new LayerPopup();
 
@@ -38,13 +38,32 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 2 edit option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>title | content</h3>
+            <h3>스크롤 제거</h3>
+            <button type="button" id="nonScrolling" class="trigger">Click</button>
+
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
+                <pre><code class="js">
+const popup = new LayerPopup({
+    scroll : false
+});
+
+element.addEventListener('click', () => {
+    popup.open();
+});             
+                </code></pre>
+            </div>
+        </div>
+
+        <!-- exm -->
+        <div class="exm_box">
+            <h3>title, content</h3>
             <button type="button" id="edit" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
 const popup = new LayerPopup({
     title : '알림',
@@ -58,14 +77,14 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 3 append option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>appendPosition</h3>
+            <h3>해당위치에 팝업 삽입</h3>
             <div class="append_box"></div>
             <button type="button" id="append" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
 const popup = new LayerPopup({
     appendPosition : '.append_box'
@@ -78,13 +97,13 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 4 non-dim option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>dim</h3>
+            <h3>배경 제거</h3>
             <button type="button" id="nonDim" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
 const popup = new LayerPopup({
     dim : false
@@ -97,15 +116,15 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 5 expire option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>expire</h3>
-            <div>
-                <h4>expire-default</h4>
+            <h3>만료일</h3>
+            <div class="exm_box">
+                <h4>만료일-기본형</h4>
                 <button type="button" id="expire" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     expire : true
@@ -117,12 +136,12 @@ element.addEventListener('click', () => {
                     </code></pre>
                 </div>
             </div>
-            <div>
-                <h4>expire-expireData (1)</h4>
+            <div class="exm_box">
+                <h4>만료일-단수</h4>
                 <button type="button" id="expire_btn" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     expire : true,
@@ -139,12 +158,12 @@ element.addEventListener('click', () => {
                     </code></pre>
                 </div>
             </div>
-            <div>
-                <h4>expire-expireData (2)</h4>
+            <div class="exm_box">
+                <h4>만료일-복수</h4>
                 <button type="button" id="expire_btns" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     expire : true,
@@ -176,15 +195,15 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 6 custom button option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>customButton</h3>
-            <div>
-                <h4>customButton-customButtonData (1)</h4>
+            <h3>버튼 설정(커스텀)</h3>
+            <div class="exm_box">
+                <h4>버튼-단수</h4>
                 <button type="button" id="custom_btn" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     customButton : true,
@@ -200,12 +219,12 @@ element.addEventListener('click', () => {
                     </code></pre>
                 </div>
             </div>            
-            <div>
-                <h4>customButton-customButtonData (2)</h4>
+            <div class="exm_box">
+                <h4>버튼-복수</h4>
                 <button type="button" id="custom_btns" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     customButton : true,
@@ -231,12 +250,12 @@ element.addEventListener('click', () => {
                     </code></pre>
                 </div>
             </div>
-            <div>
-                <h4>CustomButton-customButtonData (3)</h4>
+            <div class="exm_box">
+                <h4>버튼-이벤트 설정</h4>
                 <button type="button" id="custom" class="trigger">Click</button>
                 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     customButton : true,
@@ -272,15 +291,15 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 7 close button option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>closeButton</h3>
-            <div>
-                <h4>closeButton</h4>
+            <h3>닫기버튼 설정</h3>
+            <div class="exm_box">
+                <h4>제거</h4>
                 <button type="button" id="close_btn_remove" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     closeButton : false
@@ -293,12 +312,12 @@ element.addEventListener('click', () => {
                 </div>
             </div>
 
-            <div>
-                <h4>closeButton-closeButtonData (label)</h4>
+            <div class="exm_box">
+                <h4>버튼명 변경</h4>
                 <button type="button" id="close_btn_modify" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     closeButtonData : {
@@ -312,12 +331,12 @@ element.addEventListener('click', () => {
                     </code></pre>
                 </div>
             </div>
-            <div>
-                <h4>closeButton-closeButtonData (src)</h4>
+            <div class="exm_box">
+                <h4>버튼이미지 변경</h4>
                 <button type="button" id="close_btn_img" class="trigger">Click</button>
 
-                <div>
-                    <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
 const popup = new LayerPopup({
     closeButtonData : {
@@ -334,13 +353,13 @@ element.addEventListener('click', () => {
             </div>            
         </div>
 
-        <!-- 8 callback function option -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>Callback Function</h3>
+            <h3>콜백함수</h3>
             <button type="button" id="callback" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
 const popup = new LayerPopup(function(res){
     const message = (res) 
@@ -357,96 +376,167 @@ element.addEventListener('click', () => {
             </div>
         </div>
 
-        <!-- 9 user custom -->
+        <!-- exm -->
         <div class="exm_box">
-            <h3>Utilize</h3>
-            <button type="button" id="userCustom_sale" class="trigger">Click</button>
+            <h3>여러개의 팝업 호출</h3>
+            <button type="button" id="overlap" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+            <div class="code_box">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
-const customData = {
-    title : '&lt;p class="custom_sale_sub_title"&gt;Christmas&lt;/p&gt;'
-            + '&lt;p class="custom_sale_main_title"&gt;BIG&lt;br>SALE&lt;/p&gt;',
-    content : '&lt;p class="custom_sale_sub_text"&gt;2019.12.10~2019.12.30&lt;/p&gt;'
-            + '&lt;p class="custom_sale_main_text"&gt;&lt;strong>40만원&lt;/strong&gt; 이상 구매 고객에게' 
-            + '&lt;strong&gt;20만원대&lt;/strong&gt;의\n다양한 당첨 경품을 드립니다.&lt;p&gt;'
-}
-
-const popup = new LayerPopup({
-    className : 'custom_sale',
-    title : customData.title,
-    content : customData.content,
-    expire : true,
-    expireData : {
-        data : 1,
-        id : 'custom_sale_expire',
-        label : '하루동안보지않기'
-    },
-    closeButtonData : {
-        src : './assets/img/close.png',
-        label : '닫기'
-    },
-    customButton : true,
-    customButtonData : [
-        {
-            className : 'more',
-            label : '바로가기',
-            event : function(){
-                alert('바로가기 완료.');
-                this.LayerPopup.close();
-            },
-        }
-    ]
+const firstPopup = new LayerPopup({
+    title : '첫번째 팝업',
+    content : '2초 후 2번째 팝업이 오픈됩니다.'
 });
-        
-element.addEventListener('click', () => {
-    popup.open();
+const secondPopup = new LayerPopup({
+    title : '두번째 팝업',
+    content : '버튼 클릭 시 3번째 팝업이 오픈됩니다.',
+    customButton : true,
+    customButtonData : {
+        label : '새로운 팝업열기',
+        event : function(){
+            thirdPopup.open();
+        }
+    }
+});
+const thirdPopup = new LayerPopup({
+    title : '세번째 팝업',
+    content : '팝업을 전체 다 닫아야지 배경이 제거됩니다.'
+});
+document.getElementById('overlap').addEventListener('click', () => {
+    firstPopup.open();
+
+    setTimeout(() => {
+        secondPopup.open();
+    },2000);
 });
                 </code></pre>
             </div>
+        </div>
 
-            <button type="button" id="userCustom_stop" class="trigger">Click</button>
+        <!-- exm -->
+        <div class="exm_box">
+            <h3>디자인 팝업 만들기 예제</h3>
+            <div class="exm_box">
+                <h4>예제1</h4>
+                <button type="button" id="userCustom_sale" class="trigger">Click</button>
 
-            <div>
-                <h5 class="code_title">Source Code</h5>
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
+                    <pre><code class="js">
+    const customData = {
+        title : '&lt;p class="custom_sale_sub_title"&gt;Christmas&lt;/p&gt;'
+                + '&lt;p class="custom_sale_main_title"&gt;BIG&lt;br>SALE&lt;/p&gt;',
+        content : '&lt;p class="custom_sale_sub_text"&gt;2019.12.10~2019.12.30&lt;/p&gt;'
+                + '&lt;p class="custom_sale_main_text"&gt;&lt;strong>40만원&lt;/strong&gt; 이상 구매 고객에게' 
+                + '&lt;strong&gt;20만원대&lt;/strong&gt;의\n다양한 당첨 경품을 드립니다.&lt;p&gt;'
+    }
+    
+    const popup = new LayerPopup({
+        className : 'custom_sale',
+        title : customData.title,
+        content : customData.content,
+        expire : true,
+        expireData : {
+            data : 1,
+            id : 'custom_sale_expire',
+            label : '하루동안보지않기'
+        },
+        closeButtonData : {
+            src : './assets/img/close.png',
+            label : '닫기'
+        },
+        customButton : true,
+        customButtonData : [
+            {
+                className : 'more',
+                label : '바로가기',
+                event : function(){
+                    alert('바로가기 완료.');
+                    this.LayerPopup.close();
+                },
+            }
+        ]
+    });
+            
+    element.addEventListener('click', () => {
+        popup.open();
+    });
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="exm_box">
+                <h4>예제2</h4>
+                <button type="button" id="userCustom_stop" class="trigger">Click</button>
+
+                <div class="code_box">
+                    <h5 class="code_title">Source Code :</h5>
+                    <pre><code class="js">
+    const customData = {
+        title : '&lt;p class="title"&gt;가나다라마바\n&lt;strong&gt;서비스 일시 중단 안내&lt;/strong&gt;&lt;/p&gt;'
+            +  '&lt;p class="sub_title"&gt;정기 점검 및 보안 업그레이드를 위하여 서비스가 일시중지 됩니다.'
+            +  '\n설문 작성과 결과확인 및 설문 응답도 진행이 되지 않습니다.&lt;/p&gt;',
+        content : '&lt;p class="title"&gt;작업일시&lt;/p&gt;' 
+                + '&lt;p class="date"&gt;2019년 10월 01일(화) 10:00 ~ 12:00&lt;/p&gt;' 
+                + '&lt;p class="text"&gt;※ 작업일정은 시스템 작업 사정에 따라 다소 변동될 수 있습니다.&lt;/p&gt;'
+    }
+
+    const popup = new LayerPopup({
+        className : 'custom_sale',
+        title : customData.title,
+        content : customData.content,
+        expire : true,
+        expireData : {
+            data : 1,
+            id : 'custom_sale_expire',
+            label : '하루동안보지않기'
+        },
+        closeButtonData : {
+            src : './assets/img/close.png',
+            label : '닫기'
+        },
+        customButton : true,
+        customButtonData : [
+            {
+                className : 'more',
+                label : '바로가기',
+                event : function(){
+                    alert('바로가기 완료.');
+                    this.LayerPopup.close();
+                },
+            }
+        ]
+    });
+            
+    element.addEventListener('click', () => {
+        popup.open();
+    });
+                    </code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- exm -->
+        <div class="exm_box">
+            <h3>팝업 제거</h3>
+            <button type="button" id="remove" class="trigger">Click</button>
+
+            <div class="code_box non_border">
+                <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
-const customData = {
-    title : '&lt;p class="title"&gt;가나다라마바\n&lt;strong&gt;서비스 일시 중단 안내&lt;/strong&gt;&lt;/p&gt;'
-          +  '&lt;p class="sub_title"&gt;정기 점검 및 보안 업그레이드를 위하여 서비스가 일시중지 됩니다.'
-          +  '\n설문 작성과 결과확인 및 설문 응답도 진행이 되지 않습니다.&lt;/p&gt;',
-    content : '&lt;p class="title"&gt;작업일시&lt;/p&gt;' 
-            + '&lt;p class="date"&gt;2019년 10월 01일(화) 10:00 ~ 12:00&lt;/p&gt;' 
-            + '&lt;p class="text"&gt;※ 작업일정은 시스템 작업 사정에 따라 다소 변동될 수 있습니다.&lt;/p&gt;'
-}
-
 const popup = new LayerPopup({
-    className : 'custom_sale',
-    title : customData.title,
-    content : customData.content,
-    expire : true,
-    expireData : {
-        data : 1,
-        id : 'custom_sale_expire',
-        label : '하루동안보지않기'
-    },
-    closeButtonData : {
-        src : './assets/img/close.png',
-        label : '닫기'
-    },
     customButton : true,
     customButtonData : [
         {
-            className : 'more',
-            label : '바로가기',
+            label : '팝업삭제',
             event : function(){
-                alert('바로가기 완료.');
-                this.LayerPopup.close();
-            },
+                this.LayerPopup.remove();
+            }
         }
     ]
 });
-        
+
 element.addEventListener('click', () => {
     popup.open();
 });

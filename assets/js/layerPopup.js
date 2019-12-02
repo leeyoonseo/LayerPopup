@@ -7,7 +7,7 @@ class LayerPopup{
     /**
      * constructor
      * @param {Object} parameters - 옵션 
-     * @param {Function} callbackFunction - 기본버튼에 대한 콜백함수 
+     * @param {Function} callbackFunction - 기본 버튼에 대한 콜백함수 
      */
     constructor(parameters, callbackFunction){
         this.name = "LayerPopup";
@@ -17,7 +17,10 @@ class LayerPopup{
             className : 'popup', 
             title : 'title',
             content : 'please write your message...',
+            
+            button : true,
             dim : true,
+            scroll : true,
             
             expire : false,           
             expireData : {
@@ -32,7 +35,6 @@ class LayerPopup{
                 label : 'x'
             },
 
-            button : true,
             customButton : false,
             customButtonData : [
                 {
@@ -482,18 +484,17 @@ class LayerPopup{
 
                 }else{
                     let event = customButtonData.event
-                    let button = buttonNodes;
+                    const button = buttonNodes[0];
 
                     if(Array.isArray(customButtonData)){
                         event = customButtonData[0].event;
-                        button = buttonNodes[0];
                     }
     
                     if(!event || typeof event !== 'function' || event === ''){
                         console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
                         event = this.handleDefaultClick;
                     }
-                    
+
                     button.event = event;
                     button.addEventListener('click', event);
                 }
@@ -637,7 +638,12 @@ class LayerPopup{
             console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
-            const {dim} = this.options; 
+            const {dim, scroll} = this.options; 
+
+            if(!scroll){
+                this.setBodyScroll(false);
+            }
+
             setZindex.call(this);
             
             if(dim && this.dim) {
@@ -662,7 +668,11 @@ class LayerPopup{
     // 팝업 닫기
     close(){
         const {expireWrap} = this;
-        const {dim, expire, expireData} = this.options;
+        const {dim, scroll, expire, expireData} = this.options;
+
+        if(!scroll){
+            this.setBodyScroll(true);
+        }
 
         this.wrap.style.zIndex = 1000;
         this.wrap.classList.remove('on');
@@ -697,6 +707,15 @@ class LayerPopup{
                 });
 
             } 
+        }
+    }
+
+    setBodyScroll(isState){
+        if(isState){
+            document.body.style.removeProperty('overflow');
+
+        }else{
+            document.body.style.overflow = 'hidden';
         }
     }
 

@@ -1,0 +1,263 @@
+@charset "utf-8";
+/**
+ * LayerPopup default css
+ * @author Lee Yoon-seo (2019.11)
+ */
+h1,h2,h3,h4,h5{margin:0;}
+body{
+    margin:0;
+    color:#333;
+}
+header{
+    padding:20px 0;
+    text-align:center;
+    border-bottom:5px solid #333;
+}
+header h1{
+    margin:0;
+}
+section{
+    margin:0 20px;
+    padding:20px 0;
+}
+footer{
+    padding:10px;
+    font-size:12px;
+    text-align:center;
+    color:#fff;
+    background:#333;
+}
+h3, h4{
+    margin:0 0 10px 0;
+    font-size:18px;
+}
+.exm_box{
+    padding-top:20px;
+}
+
+h3 + .exm_box{
+    padding-top:0;
+}
+
+.code_box{
+    padding-bottom:20px;
+    border-bottom:1px dashed #aaa;
+}
+.code_title{
+    margin:0 0 10px 0;
+    font-size:16px;
+}
+pre{
+    margin:0;
+}
+.non_border{
+    border:0;
+}
+.trigger{
+    padding:8px 20px;
+    margin-bottom:10px;
+    display:inline-block;
+    border:1px solid #333;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+}
+.trigger:hover{
+    background:rgba(0, 0, 0, 0.05);
+}
+
+/* example custom_sale */
+.custom_sale_wrap div, 
+.custom_sale_wrap p,
+.custom_sale_wrap button{
+    margin:0;
+}
+.custom_sale_wrap{
+    margin:0;
+    z-index:1000;
+    display:none;
+    padding-bottom:45px;
+    position:fixed;
+    left:50%;
+    top:50%;
+    min-width:400px;
+    min-height:400px;
+    font-size:100%;
+    text-align:center;
+    border:10px solid #0f4f41;
+    box-sizing:border-box;
+    transform:translate(-50%, -50%);
+}
+.custom_sale_wrap:after{
+    content:'';
+    display:block;
+    z-index:-1;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:url('../img/exm_bg.jpg');
+}
+.custom_sale_wrap.on{
+    display:inline-block;
+}
+.custom_sale_header{
+    position:relative;
+    overflow:hidden;
+    font-family:Arial, Helvetica, sans-serif;
+    padding-top:50px;
+}
+.custom_sale_sub_title{
+    font-size:18px;
+    font-weight:700;
+    color:#961e1f;
+}
+.custom_sale_main_title{
+    font-size:80px;
+    font-weight:700;
+    line-height:1;
+    color:#3b3b3b;
+}
+.custom_sale_close{
+    position:absolute;
+    top:5px;
+    right:5px;
+    width:20px;
+    height:20px;
+    border:0;
+    border-radius:50%;
+    background-color:#fff;
+    background-repeat:no-repeat;
+    background-size:contain;
+    cursor:pointer;
+    text-indent:-9999px
+
+}
+.custom_sale_container{
+    padding-bottom:20px;
+}
+.custom_sale_sub_text{
+    display:inline-block;
+    padding:5px 15px;
+    font-size:13px;
+    border-radius:15px;
+    color:#fff;
+    background:#1c6b58;
+}
+.custom_sale_main_text{
+    padding-top:20px;
+    font-size:13px;
+    letter-spacing:-1px;
+}
+.custom_sale_expire_wrap{
+    padding:0 0 20px;
+    font-size:12px;
+}
+.custom_sale_expire_box input{
+    display:none;
+}
+.custom_sale_expire_box label{
+    cursor:pointer;
+}
+.custom_sale_expire_box input:checked + label:before{
+    background:#aaa;
+}
+.custom_sale_expire_box label:before{
+    display:inline-block;
+    content:'';
+    margin-right:5px;
+    width:9px;
+    height:9px;
+    background:#fff;
+    border:1px solid #333;
+}
+.custom_sale_buttons_wrap .more{
+    padding:5px 20px;
+    font-weight:700;
+    border:1px solid #1c6b58;
+    border-radius:3px;
+    color:#fff;
+    background:#1c6b58;
+    cursor:pointer;
+}
+
+/* example custom_stop */
+.custom_stop_wrap,
+.custom_stop_wrap div, 
+.custom_stop_wrap p,
+.custom_stop_wrap button{
+    margin:0;
+}
+.custom_stop_wrap{
+    z-index:1000;
+    padding:0 20px 20px;
+    min-width:400px;
+    display:none;
+    position:fixed;
+    left:50%;
+    top:50%;
+    font-size:100%;
+    text-align:center;
+    letter-spacing:-2px;
+    background:#fff;
+    transform:translate(-50%, -50%);
+}
+.custom_stop_wrap.on{
+    display:inline-block;
+}
+.custom_stop_header:before{
+    content:'';
+    display:block;
+    height:10px;
+    border-radius:0 0 50px 50px;
+    background:#ff3c00;
+}
+.custom_stop_title{
+    padding:30px 0 20px;
+    color:#ff3c00;
+}
+.custom_stop_title .title{
+    padding-bottom:20px;
+    font-family:serif;
+    font-size:30px;
+    letter-spacing:-4px;
+    line-height:1.2em;
+}
+.custom_stop_title .sub_title{
+    font-size:14px;
+    color:#333;
+}
+.custom_stop_container{
+    padding:10px 20px 20px;
+    font-size:14px;
+    line-height:1.5em;
+    background:#e9e8e8;
+    border-radius:5px;
+}
+
+.custom_stop_container .title{
+    display:inline-block;
+    padding:0 10px;
+    border-radius:10px;
+    color:#fff;
+    background:#ff3c00;
+}
+.custom_stop_container .date{
+    font-weight:700;
+    letter-spacing:-1px;
+    color:#ff3c00;
+}
+.custom_stop_container .text{
+    font-weight:700;
+}
+.custom_stop_footer{
+    position:relative;
+}
+.custom_stop_expire_wrap{
+    position:absolute;
+    top:20px;
+    right:-20px;
+    font-size:14px;
+    letter-spacing:-1px;
+}

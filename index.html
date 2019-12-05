@@ -43,6 +43,17 @@ element.addEventListener('click', () => {
             <h3>스크롤 제거</h3>
             <button type="button" id="nonScrolling" class="trigger">Click</button>
 
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>scroll</td>
+                        <td>Boolean</td>
+                        <td>배경 스크롤 여부</td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
@@ -61,6 +72,22 @@ element.addEventListener('click', () => {
         <div class="exm_box">
             <h3>title, content</h3>
             <button type="button" id="edit" class="trigger">Click</button>
+
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>title</td>
+                        <td>String or Object</td>
+                        <td>팝업 타이틀</td>
+                    </tr>
+                    <tr>
+                        <td>content</td>
+                        <td>String or Object</td>
+                        <td>팝업 메세지</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
@@ -83,6 +110,17 @@ element.addEventListener('click', () => {
             <div class="append_box"></div>
             <button type="button" id="append" class="trigger">Click</button>
 
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>appendPosition</td>
+                        <td>String</td>
+                        <td>삽입하려는 객체의 tagName, id, class<br>(ex) 'body', '#box', '.desc'</td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
@@ -101,6 +139,17 @@ element.addEventListener('click', () => {
         <div class="exm_box">
             <h3>배경 제거</h3>
             <button type="button" id="nonDim" class="trigger">Click</button>
+
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>dim</td>
+                        <td>Boolean</td>
+                        <td>배경처리 여부</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
@@ -123,6 +172,27 @@ element.addEventListener('click', () => {
                 <h4>만료일-기본형</h4>
                 <button type="button" id="expire" class="trigger">Click</button>
 
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td><strong>expire</strong></td>
+                            <td>Boolean</td>
+                            <td>만료일 사용 여부<br>expireData 설정하지 않는다면 기본 문구와 날짜가 설정된다.</td>
+                        </tr>
+                        <tr>
+                            <td>expireData</td>
+                            <td>Object or Array</td>
+                            <td>만료일 날짜, 문구 설정<br>expire가 false이면 사용 불가능</td>
+                        </tr>
+                        <tr>
+                            <td>this.FoxLayerPopup.close(true or false)</td>
+                            <td>커스텀 event시 호출</td>
+                            <td>true일 경우 만료일 저장</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
@@ -139,6 +209,27 @@ element.addEventListener('click', () => {
             <div class="exm_box">
                 <h4>만료일-단수</h4>
                 <button type="button" id="expire_btn" class="trigger">Click</button>
+
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td><strong>expire</strong></td>
+                            <td>Boolean</td>
+                            <td>만료일 사용 여부<br>expireData 설정하지 않는다면 기본 문구와 날짜가 설정된다.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>expireData</strong></td>
+                            <td>Object or Array</td>
+                            <td>만료일 날짜, 문구 설정<br>expire가 false이면 사용 불가능</td>
+                        </tr>
+                        <tr>
+                            <td>this.FoxLayerPopup.close(true or false)</td>
+                            <td>커스텀 event시 호출</td>
+                            <td>true일 경우 만료일 저장</td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
@@ -161,6 +252,27 @@ element.addEventListener('click', () => {
             <div class="exm_box">
                 <h4>만료일-복수</h4>
                 <button type="button" id="expire_btns" class="trigger">Click</button>
+
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td><strong>expire</strong></td>
+                            <td>Boolean</td>
+                            <td>만료일 사용 여부<br>expireData 설정하지 않는다면 기본 문구와 날짜가 설정된다.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>expireData</strong></td>
+                            <td>Object or Array</td>
+                            <td>만료일 날짜, 문구 설정<br>expire가 false이면 사용 불가능</td>
+                        </tr>
+                        <tr>
+                            <td>this.FoxLayerPopup.close(true or false)</td>
+                            <td>커스텀 event시 호출</td>
+                            <td>true일 경우 만료일 저장</td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
@@ -199,6 +311,27 @@ element.addEventListener('click', () => {
             <h4>만료일-커스텀</h4>
             <button type="button" id="expire_custom_btn" class="trigger">Click</button>
 
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td><strong>expire</strong></td>
+                        <td>Boolean</td>
+                        <td>만료일 사용 여부<br>expireData 설정하지 않는다면 기본 문구와 날짜가 설정된다.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>expireData</strong></td>
+                        <td>Object or Array</td>
+                        <td>만료일 날짜, 문구 설정<br>expire가 false이면 사용 불가능</td>
+                    </tr>
+                    <tr>
+                        <td><strong>this.FoxLayerPopup.close(true or false)</strong></td>
+                        <td>커스텀 event시 호출</td>
+                        <td>true일 경우 만료일 저장</td>
+                    </tr>
+                </table>
+            </div>
+
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
                 <pre><code class="js">
@@ -210,7 +343,7 @@ const popup = new LayerPopup({
             className : 'custom_done',
             label : '커스텀 확인',
             event : function(){
-                this.FoxLayerPopup.close(true);
+                this.LayerPopup.close(true);
             }
         },
         {
@@ -218,7 +351,7 @@ const popup = new LayerPopup({
             className : 'custom_cancel',
             label : '커스텀 취소',
             event : function(){
-                this.FoxLayerPopup.close(false);
+                this.LayerPopup.close(false);
             }
         }
     ],
@@ -251,6 +384,22 @@ element.addEventListener('click', () => {
             <div class="exm_box">
                 <h4>버튼-단수</h4>
                 <button type="button" id="custom_btn" class="trigger">Click</button>
+
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td>customButton</td>
+                            <td>Boolean</td>
+                            <td>버튼 사용자설정 여부</td>
+                        </tr>
+                        <tr>
+                            <td>customButtonData</td>
+                            <td>Object or Array</td>
+                            <td>사용자설정할 버튼 데이터</td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
@@ -304,6 +453,17 @@ element.addEventListener('click', () => {
                 <h4>버튼-이벤트 설정</h4>
                 <button type="button" id="custom" class="trigger">Click</button>
                 
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td>event : function(){}</td>
+                            <td>Function</td>
+                            <td>사용자설정 버튼 클릭 시 이벤트<br>this.FoxLayerPopup.close()로 팝업닫기 가능</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
@@ -348,6 +508,17 @@ element.addEventListener('click', () => {
                 <h4>제거</h4>
                 <button type="button" id="close_btn_remove" class="trigger">Click</button>
 
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td>closeButton</td>
+                            <td>Boolean</td>
+                            <td>상단 닫기 버튼 제거<br>기본 값 true</td>
+                        </tr>
+                    </table>
+                </div>
+
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
                     <pre><code class="js">
@@ -365,6 +536,17 @@ element.addEventListener('click', () => {
             <div class="exm_box">
                 <h4>버튼명 변경</h4>
                 <button type="button" id="close_btn_modify" class="trigger">Click</button>
+
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td>closeButtonData</td>
+                            <td>Object</td>
+                            <td>상단 닫기 버튼명, 이미지 수정<br>closeButton가 false일 때 사용불가</td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
@@ -384,6 +566,17 @@ element.addEventListener('click', () => {
             <div class="exm_box">
                 <h4>버튼이미지 변경</h4>
                 <button type="button" id="close_btn_img" class="trigger">Click</button>
+
+                <div class="desc_box">
+                    <h5 class="desc_title">Parameters :</h5>
+                    <table>
+                        <tr>
+                            <td>closeButtonData</td>
+                            <td>Object</td>
+                            <td>상단 닫기 버튼명, 이미지 수정<br>closeButton가 false일 때 사용불가<br>경로는 html 기준</td>
+                        </tr>
+                    </table>
+                </div>
 
                 <div class="code_box">
                     <h5 class="code_title">Source Code :</h5>
@@ -407,6 +600,17 @@ element.addEventListener('click', () => {
         <div class="exm_box">
             <h3>콜백함수</h3>
             <button type="button" id="callback" class="trigger">Click</button>
+
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>callback</td>
+                        <td>Function</td>
+                        <td>기본 이미지 버튼 클릭 시 callback함수 설정</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="code_box">
                 <h5 class="code_title">Source Code :</h5>
@@ -571,6 +775,17 @@ document.getElementById('overlap').addEventListener('click', () => {
         <div class="exm_box">
             <h3>팝업 제거</h3>
             <button type="button" id="remove" class="trigger">Click</button>
+
+            <div class="desc_box">
+                <h5 class="desc_title">Parameters :</h5>
+                <table>
+                    <tr>
+                        <td>this.FoxLayerPopup.remove()</td>
+                        <td>커스텀 event에서 함수 호출</td>
+                        <td>팝업 객체 삭제</td>
+                    </tr>
+                </table>
+            </div>
 
             <div class="code_box non_border">
                 <h5 class="code_title">Source Code :</h5>

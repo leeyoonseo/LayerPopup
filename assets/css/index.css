@@ -38,7 +38,23 @@ h3, h4{
 h3 + .exm_box{
     padding-top:0;
 }
-
+.desc_box{
+    margin-bottom:10px;
+    line-height:24px;
+}
+.desc_title{
+    margin:0 0 10px 0;
+    font-size:16px;
+}
+.desc_box table{
+    font-size:14px;
+    border-collapse:collapse;
+    border-spacing:0;
+}
+.desc_box table td{
+    padding:2px 7px;
+    border:1px solid #aaa;
+}
 .code_box{
     padding-bottom:20px;
     border-bottom:1px dashed #aaa;

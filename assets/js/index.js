@@ -62,12 +62,12 @@ const expireOptsPopup = new LayerPopup({
     expire : true,
     expireData : [
         {
-            date : 365,
+            date : 1,
             id : 'opts_day',
             label : '하루동안보지않기'
         },
         {
-            date : 365,
+            date : 7,
             id : 'opts_mon',
             label : '한달동안보지않기'
         }
@@ -75,12 +75,52 @@ const expireOptsPopup = new LayerPopup({
         {
             date : 365,
             id : 'opts_never',
-            label : '다시보지않기'
+            label : '일년동안보지않기'
         }
     ]
 });
 document.getElementById('expire_btns').addEventListener('click', () => {
     expireOptsPopup.open();
+});
+//만료일-커스텀
+const expireOptsCustomPopup = new LayerPopup({
+    customButton : true,
+    customButtonData : [
+        {
+            type : 'button',
+            className : 'custom_done',
+            label : '커스텀 확인',
+            event : function(){
+                console.log('custom 확인!');
+                this.LayerPopup.close(true);
+            }
+        },
+        {
+            type : 'button',
+            className : 'custom_cancel',
+            label : '커스텀 취소',
+            event : function(){
+                console.log('custom 취소!');
+                this.LayerPopup.close(false);
+            }
+        }
+    ],
+    expire : true,
+    expireData : [
+        {
+            date : 1,
+            id : 'custom_day',
+            label : '하루동안보지않기'
+        },
+        {
+            date : 7,
+            id : 'custom_week',
+            label : '일주일동안보지않기'
+        }
+    ]
+});
+document.getElementById('expire_custom_btn').addEventListener('click', () => {
+    expireOptsCustomPopup.open();
 });
 
 // 버튼 설정(커스텀)

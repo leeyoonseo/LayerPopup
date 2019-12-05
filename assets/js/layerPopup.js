@@ -668,7 +668,7 @@ class LayerPopup{
     }
 
     // 팝업 닫기
-    close(){
+    close(isExpireState){
         const {expireWrap} = this;
         const {dim, scroll, expire, expireData} = this.options;
 
@@ -696,14 +696,18 @@ class LayerPopup{
         }
 
         if(expire && expireData){
-            resetChecked();
+            resetChecked(this);
 
-            function resetChecked(){
+            function resetChecked(LayerPopup){
                 const child = expireWrap.childNodes;
                 Array.from(child).map(({childNodes}) => {
                     Array.from(childNodes).map(e => {
                         if(e.tagName.toLowerCase() === 'input' && e.checked){
                             e.checked = false;
+
+                            if(isExpireState){
+                                LayerPopup.handleExpire(e.value);
+                            }
                         }
                     });
                 });

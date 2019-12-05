@@ -80,7 +80,11 @@ class LayerPopup{
         // 무조건 생성
         this.wrap = createElement({
             className : className + '_wrap'
-        });        
+        });    
+
+        this.wrapInner = createElement({
+            className : className + '_inner'
+        });           
 
         this.container = createElement({
             className : className + '_container'
@@ -372,7 +376,7 @@ class LayerPopup{
 
     // 레이어팝업 객체 삽입, 순서 변경되면 안됨
     layoutAppend(){
-        const {appendPosition, title, dim, closeButton, button, expire, expireData} = this.options;
+        const { appendPosition, title, dim, closeButton, button, expire, expireData} = this.options;
 
         if(title){
             this.header.append(this.title);
@@ -393,14 +397,16 @@ class LayerPopup{
         }
 
         if(this.header){
-            this.wrap.append(this.header); 
+            this.wrapInner.append(this.header); 
         }
 
-        this.wrap.append(this.container); 
+        this.wrapInner.append(this.container); 
 
         if(button || expire){
-            this.wrap.append(this.footer); 
+            this.wrapInner.append(this.footer); 
         }
+
+        this.wrap.append(this.wrapInner);
         
         this.setContent();
         this.attachEvent();
@@ -413,7 +419,6 @@ class LayerPopup{
 
             target.append(this.wrap);
         }
-
 
         if(dim && this.dim) document.body.append(this.dim);
     }

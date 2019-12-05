@@ -574,14 +574,11 @@ class LayerPopup{
         const {LayerPopup} = target;
         const {options, expireWrap} = LayerPopup;
         const {button, expire, expireData} = options;
+        const btnClass = target.classList.value;
+        let result = (btnClass.search('done') > 0) ? true : false;
 
         if(button){
             if(LayerPopup.callback && LayerPopup.callback !== ''){
-                const btnClass = target.classList.value;
-                let result = (btnClass.search('done') > 0) 
-                    ? true 
-                    : false;
-    
                 LayerPopup.callback(result);
             }
         }
@@ -591,7 +588,7 @@ class LayerPopup{
                 Array.from(expire).map(({childNodes}) => {
                     Array.from(childNodes).map(e => {
                         if(e.tagName.toLowerCase() === 'input'){
-                            if(e.checked){
+                            if(e.checked && result){
                                 LayerPopup.handleExpire(e.value);
                             }
                         }
@@ -633,7 +630,7 @@ class LayerPopup{
 
     // 쿠키 가져오기
     getCookie(name){
-        var value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
         return value ? value[2] : null;
     }
 
@@ -728,23 +725,18 @@ class LayerPopup{
         const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
 
         if(otherPopup){
-        
             this.dim.remove();
-            
         }
 
         this.dettachEvent();
-
         this.wrap.remove();
 
-
-
-        
         this.name,
         this.options,
         this.callback,
         this.dim,
         this.wrap,
+        this.wrapInner,
         this.header,
         this.container,
         this.footer,

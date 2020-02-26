@@ -1,11 +1,26 @@
+/**
+ * @author Lee Yoon Seo
+ */
+
 (function(){
-    // 옵션 없음
+
+    /**
+     * 옵션 없는 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const defaultPopup = new LayerPopup();
     document.getElementById('default').addEventListener('click', () => {
         defaultPopup.open();
     });
 
-    // 스크롤 제거
+    /**
+     * dim 스크롤 제거한 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const nonScrollPopup = new LayerPopup({
         scroll : false
     });
@@ -13,7 +28,13 @@
         nonScrollPopup.open();
     });
 
-    // 타이틀, 콘텐츠
+
+    /**
+     * 타이틀, 콘텐츠 수정한 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const EditPopup = new LayerPopup({
         title : '알림',
         content : '오늘은 문화가 있는 수요일입니다.\n롯데시네마, CGV : 오후 5시~9시까지 5,000원에 영화를 관람할 수 있습니다.'
@@ -22,7 +43,12 @@
         EditPopup.open();
     });
 
-    // 해당위치에 팝업 삽입
+    /**
+     * 원하는 부모 위치에 팝업 삽입 후 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const appendPopup = new LayerPopup({
         appendPosition : '.append_box'
     });
@@ -30,7 +56,12 @@
         appendPopup.open();
     });
 
-    // 배경 제거
+    /**
+     * dim 제거한 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const nonDimPopup = new LayerPopup({
         dim : false
     });
@@ -38,15 +69,26 @@
         nonDimPopup.open();
     });
 
-    // 만료일
-    // 만료일-기본형
+
+    /**
+     * 만료일(기본형) 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const expirePopup = new LayerPopup({
         expire : true
     });
     document.getElementById('expire').addEventListener('click', () => {
         expirePopup.open();
     });
-    // 만료일-단수
+
+    /**
+     * 만료일(단수) 팝업 호출
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const expireOptPopup = new LayerPopup({
         expire : true,
         expireData : {
@@ -58,7 +100,13 @@
     document.getElementById('expire_btn').addEventListener('click', () => {
         expireOptPopup.open();
     });
-    // 만료일-복수
+
+    /**
+     * 만료일, 만료일 - 복수
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const expireOptsPopup = new LayerPopup({
         expire : true,
         expireData : [
@@ -83,7 +131,13 @@
     document.getElementById('expire_btns').addEventListener('click', () => {
         expireOptsPopup.open();
     });
-    //만료일-커스텀
+
+    /**
+     * 만료일, 만료일 - 커스텀
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const expireOptsCustomPopup = new LayerPopup({
         customButton : true,
         customButtonData : [
@@ -124,8 +178,12 @@
         expireOptsCustomPopup.open();
     });
 
-    // 버튼 설정(커스텀)
-    // 단수
+    /**
+     * 버튼 설정(커스텀), 단수
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const customOptPopup = new LayerPopup({
         customButton : true,
         customButtonData : {
@@ -136,7 +194,13 @@
     document.getElementById('custom_btn').addEventListener('click', () => {
         customOptPopup.open();
     });
-    // 복수
+
+    /**
+     * 버튼 설정(커스텀), 복수
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const customOptsPopup = new LayerPopup({
         customButton : true,
         customButtonData : [
@@ -157,7 +221,13 @@
     document.getElementById('custom_btns').addEventListener('click', () => {
         customOptsPopup.open();
     });
-    // 버튼-이벤트 설정
+
+    /**
+     * 버튼-이벤트 설정
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const customAllPopup = new LayerPopup({
         customButton : true,
         customButtonData : [
@@ -187,15 +257,25 @@
         customAllPopup.open();
     });
 
-    // 닫기버튼 설정
-    // 제거
+    /**
+     * 닫기버튼 설정, 제거
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const closeButtonRemovePopup = new LayerPopup({
         closeButton : false
     });
     document.getElementById('close_btn_remove').addEventListener('click', () => {
         closeButtonRemovePopup.open();
     });
-    // 버튼명 변경
+
+    /**
+     * 버튼명 변경
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const closeButtonModifyPopup = new LayerPopup({
         closeButtonData : {
             label : '닫기'
@@ -204,7 +284,13 @@
     document.getElementById('close_btn_modify').addEventListener('click', () => {
         closeButtonModifyPopup.open();
     });
-    // 버튼이미지 변경
+
+    /**
+     * 버튼이미지 변경
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const closeButtonImgPopup = new LayerPopup({
         closeButtonData : {
             src : './assets/img/close.png',
@@ -215,7 +301,12 @@
         closeButtonImgPopup.open();
     });
 
-    // 콜백함수
+    /**
+     * 콜백함수
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const callbackPopup = new LayerPopup(function(res){
         const message = (res) 
             ? '확인을 클릭하셨습니다.' 
@@ -227,11 +318,24 @@
         callbackPopup.open();
     });
 
-    // 여러개의 팝업 호출
+    /**
+     * 여러개의 팝업 호출 - 1
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const overlapPopup = new LayerPopup({
         title : '첫번째 팝업',
         content : '2초 후 2번째 팝업이 오픈됩니다.'
     });
+
+    
+    /**
+     * 여러개의 팝업 호출 - 2
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const overlapPopup2 = new LayerPopup({
         title : '두번째 팝업',
         content : '버튼 클릭 시 3번째 팝업이 오픈됩니다.',
@@ -243,6 +347,13 @@
             }
         }
     });
+
+    /**
+     * 여러개의 팝업 호출 - 3
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const overlapPopup3 = new LayerPopup({
         title : '세번째 팝업',
         content : '팝업을 전체 다 닫아야지 배경이 제거됩니다.'
@@ -255,7 +366,12 @@
         },2000);
     });
 
-    // 디자인 팝업 만들기 예제1
+    /**
+     * 디자인 팝업 만들기 예제1
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const customData = {
         sale : {
             title : '<p class="custom_sale_sub_title">Christmas</p>'
@@ -303,7 +419,12 @@
         userCustomSalePopup.open();
     });
 
-    // 디자인 팝업 만들기 예제2
+    /**
+     * 디자인 팝업 만들기 예제2
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const userCustomStopPopup = new LayerPopup({
         className : 'custom_stop',
         title : customData.stop.title,
@@ -321,7 +442,12 @@
         userCustomStopPopup.open();
     });
 
-    // 팝업 제거
+    /**
+     * 팝업 제거
+     * @global
+     * @augments LayerPopup
+     * @requires layerPopup.js
+     */
     const removePopup = new LayerPopup({
         customButton : true,
         customButtonData : [

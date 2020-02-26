@@ -1,0 +1,27 @@
+{
+  "name": "LayerPopup",
+  "version": "1.0.0",
+  "description": "Initialize LayerPopup // 제목",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "jsdoc" : "jsdoc -c jsdoc.conf README.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leeyoonseo/LayerPopup.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/leeyoonseo/LayerPopup/issues"
+  },
+  "homepage": "https://github.com/leeyoonseo/LayerPopup#readme",
+  "devDependencies": {
+    "docdash": "^1.2.0",
+    "jsdoc": "^3.6.3",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
+  }
+}

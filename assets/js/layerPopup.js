@@ -1,17 +1,29 @@
 /**
- * Layer Popup
- * @author yoonseo.lee(2019.11)
+ * @author yoonseo.lee <okayoon.lee@gmail.com>
+ * @version 1.0.0
+ * @since 2019.11
+ * @file 레이어팝업 플러그인
+ * @copyright yoonseo.lee 2019.11
+ * 
+ * @see https://github.com/jsdoc/jsdoc/issues/819
  */
-class LayerPopup{
+
+ class LayerPopup{
 
     /**
-     * constructor
-     * @param {Object} parameters - 옵션 
-     * @param {Function} callbackFunction - 기본 버튼에 대한 콜백함수 
+     * 레이어팝업 생성, 삽입, 삭제, 커스텀 클래스
+     * @param {object} parameters - 옵션 
+     * @param {function} callbackFunc - 기본 버튼 클릭 시 실행될 콜백함수 
      */
-    constructor(parameters, callbackFunction){
-        this.name = "LayerPopup";
-
+    constructor(parameters, callbackFunc){
+        
+        /**
+         * @member LayerPopup#name
+         * @prop {string} name 생성자 이름
+         * @prop {string} name 생성자 이름
+         * @prop {string} options 생성자 이름
+         */
+        this.name = "LayerPopup";        
         this.options = {
             appendPosition : 'body', 
             className : 'popup', 
@@ -49,7 +61,7 @@ class LayerPopup{
         if(parameters){
             if(typeof parameters === 'object'){
                 this.options = Object.assign({}, this.options, parameters);
-                this.callback = callbackFunction || '';
+                this.callback = callbackFunc || '';
     
             }else if(typeof parameters === 'function'){
                 this.callback = parameters;
@@ -60,11 +72,14 @@ class LayerPopup{
             }
         }
         
-        this.createElement();
+        this._initialize();
     }   
 
-    // 레이어 팝업 객체 생성
-    createElement(){
+    /**
+     * 레이어 팝업 객체 생성 및 삽입 컨트롤
+     * @this LayerPopup
+     */
+    _initialize(){
         const {
             className, 
             closeButton, 
@@ -77,41 +92,41 @@ class LayerPopup{
             expireData
         } = this.options;
 
-        // 무조건 생성
-        this.wrap = createElement({
+        const _createElement = this._createElement;
+
+        this.wrap = _createElement({
             className : className + '_wrap'
         });    
 
-        this.wrapInner = createElement({
+        this.wrapInner = _createElement({
             className : className + '_inner'
         });           
 
-        this.container = createElement({
+        this.container = _createElement({
             className : className + '_container'
         });        
 
-        this.content = createElement({
+        this.content = _createElement({
             tag : 'div', 
             className : className + '_content'
         });
-
-        // 조건 생성
+        
         this.dim = document.querySelector('[data-type="dim"]');
 
         if(dim && !this.dim) {
-            this.dim = createElement({
+            this.dim = _createElement({
                 className : className + '_dim' 
             });
         }
 
         if(title || closeButton){
-            this.header = createElement({
+            this.header = _createElement({
                 className : className + '_header'
             });
         }
 
         if(title) {
-            this.title = createElement({
+            this.title = _createElement({
                 tag : 'p', 
                 className : className + '_title'
             });
@@ -122,7 +137,7 @@ class LayerPopup{
                 ? 'x' 
                 : closeButtonData.label;
 
-            this.closeButton = createElement({
+            this.closeButton = _createElement({
                 tag : 'button',
                 className : className + '_close',
                 label : closeLabel,
@@ -131,12 +146,12 @@ class LayerPopup{
         }
 
         if(button || expire){
-            this.buttonsWrap = createElement({
+            this.buttonsWrap = _createElement({
                 tag : 'div', 
                 className : className + '_buttons_wrap'
             });
 
-            this.footer = createElement({
+            this.footer = _createElement({
                 className : className + '_footer'
             });
         }
@@ -154,7 +169,7 @@ class LayerPopup{
                         let key = this.getRandomNumber();
                         e.key = key;
     
-                        let el = createElement.call(that, { 
+                        let el = _createElement.call(that, { 
                             tag : 'button', 
                             type : e.type, 
                             className : (e.className) ? e.className : key,                         
@@ -172,7 +187,7 @@ class LayerPopup{
                     const {type, className, label, event} = btn;
                     btn.key = key;
 
-                    const el = createElement.call(this, { 
+                    const el = _createElement.call(this, { 
                         tag : 'button', 
                         type : type, 
                         className : (className) ? className : key, 
@@ -194,7 +209,7 @@ class LayerPopup{
                 expireBtn, 
                 expireLabel;
 
-            this.expireWrap = createElement.call(this,{
+            this.expireWrap = _createElement.call(this,{
                 tag : 'div',
                 className : prefix + '_wrap'
             });
@@ -203,12 +218,12 @@ class LayerPopup{
                 const that = this;
 
                 expireData.map(({className, id, date, label}) => {
-                    expireBox = createElement.call(that, {
+                    expireBox = _createElement.call(that, {
                         tag : 'p', 
                         className : prefix + '_box'
-                    });
+                    }); 
 
-                    expireBtn = createElement.call(that, {
+                    expireBtn = _createElement.call(that, {
                         tag : 'input',
                         type : 'checkbox', 
                         name : prefix + '_chk', 
@@ -217,7 +232,7 @@ class LayerPopup{
                         label : date
                     });
 
-                    expireLabel = createElement.call(that,{
+                    expireLabel = _createElement.call(that,{
                         tag : 'label',
                         label : prefix + '_label', 
                         id : id,
@@ -229,12 +244,12 @@ class LayerPopup{
                 });
 
             }else{
-                expireBox = createElement.call(this, {
+                expireBox = _createElement.call(this, {
                     tag : 'p',
-                     className : prefix + '_box'
+                    className : prefix + '_box'
                 });
 
-                expireBtn = createElement.call(this,{
+                expireBtn = _createElement.call(this,{
                     tag : 'input',
                     type : 'checkbox', 
                     className : prefix + '_chk', 
@@ -242,7 +257,7 @@ class LayerPopup{
                     label : expireData.date
                 });
 
-                expireLabel = createElement.call(this, {
+                expireLabel = _createElement.call(this, {
                     tag : 'label',
                     label : prefix + '_label', 
                     id : expireData.id,
@@ -254,104 +269,20 @@ class LayerPopup{
             }
         } // expired
 
-        this.setAttribute();
-        this.layoutAppend(); 
+        this._setAttribute();
+        this._layoutAppend(); 
 
-        /**
-         * 돔 생성, 버튼 생성하기 위해 호출 시 .call(this) 추가해야 함
-         * @param {Object} 
-         * @param tag 객체 tag
-         * @param id 객체 id
-         * @param className 객체 class(복수일 경우 쉼표로 구분)
-         * @param name 객체 name
-         * @param type 객체 type (input, button)
-         * @param label 객체 label (button 텍스트, label 텍스트)
-         * @usage
-         *      title = createElement({ 
-         *          tag : 'p', 
-         *          className : 'title,title-red,title-required' 
-         *      });
-         *      
-         *      button = createElement({ 
-         *          tag : 'button', 
-         *          className : 'cancel',
-         *          type : 'button', 
-         *          label : '취소버튼' 
-         *      });
-         */
-        function createElement({ 
-            tag = 'div', 
-            id, 
-            className, 
-            name, 
-            type = 'button', 
-            label = '버튼', 
-            src,
-            text
-        }){
-
-            const el = document.createElement(tag);
-
-            if(className){
-                const splitClassName = className.split(',');
-
-                if(splitClassName.length > 1){
-                    splitClassName.map(e =>  el.classList.add(e));
-
-                }else{
-                    el.classList.add(className);
-                }
-            }
-
-            if(name){
-                el.name = name;
-            }
-
-            if(id && tag !== 'label'){
-                el.id = id;
-            }
-
-            if(tag === 'label' && text){
-                el.innerText = text;
-            }
-            
-            if(tag === 'button'){   
-                el.setAttribute('type', (type !== '') ? type : 'button');
-                el.LayerPopup = this;
-                el.innerText = (label !== '') ? label : '버튼';
-                
-                if(src && src !== ''){
-                    el.style.backgroundImage = 'url(' + src + ')';
-                    el.classList.add('bg');
-                }
-            }
-
-            if(expire){
-                if(type === 'radio' || type === 'checkbox'){
-                    el.value = label;
-                    el.setAttribute('type', type);
-                    el.dataset.type = 'expired';
-                    el.LayerPopup = this;
-                }
-                
-                if(tag === 'label'){       
-                    el.setAttribute('for', id);
-                }
-            }
-
-            return el;
-        } // createElement
 
         // 기본 버튼 생성(확인, 취소)
         function defaultButtons(){
-            this.done = createElement.call(this, {
+            this.done = _createElement.call(this, {
                 tag : 'button', 
                 className : className + '_button_done', 
                 type : 'submit',
                 label : 'confirm'
             });
 
-            this.cancel = createElement.call(this, {
+            this.cancel = _createElement.call(this, {
                 tag : 'button', 
                 className : className + '_button_cancel', 
                 label : 'cancel'
@@ -359,10 +290,102 @@ class LayerPopup{
 
             this.buttonsWrap.append(this.done, this.cancel);
         }
-    } // create
+    } // initialize
 
-    // 객체 속성 부여
-    setAttribute(){
+
+    /**
+     * 객체 생성하는 함수, 버튼 생성할때는 호출 시 .call(this) 바인딩해줘야 함.
+     * @param {string} tag 객체 tagName (default = div)
+     * @param {string} id 객체 id
+     * @param {string} className  객체 class
+     * @param {string} name 객체 name
+     * @param {string} type 객체 종류 (default = button)
+     * @param {label} label label 텍스트 (default = 버튼)
+     * @param {string} src 버튼 이미지 주소
+     * @param {string} text 버튼 텍스트
+     * @return {object} 레이어팝업 객체
+     * @example
+     * title = _createElement({ 
+     *      tag : 'p', 
+     *      className : 'title,title-red,title-required' 
+     * });
+     *      
+     * button = _createElement.call(this,{ 
+     *      tag : 'button', 
+     *      className : 'cancel',
+     *      type : 'button', 
+     *      label : '취소버튼' 
+     * });
+     */
+    _createElement({ 
+        tag = 'div', 
+        id, 
+        className, 
+        name, 
+        type = 'button', 
+        label = '버튼', 
+        src,
+        text
+    }){
+
+        const el = document.createElement(tag);
+
+        if(className){
+            const splitClassName = className.split(',');
+
+            if(splitClassName.length > 1){
+                splitClassName.map(e =>  el.classList.add(e));
+
+            }else{
+                el.classList.add(className);
+            }
+        }
+
+        if(name){
+            el.name = name;
+        }
+
+        if(id && tag !== 'label'){
+            el.id = id;
+        }
+
+        if(tag === 'label' && text){
+            el.innerText = text;
+        }
+        
+        if(tag === 'button'){   
+            el.setAttribute('type', (type !== '') ? type : 'button');
+            el.LayerPopup = this;
+            el.innerText = (label !== '') ? label : '버튼';
+            
+            if(src && src !== ''){
+                el.style.backgroundImage = 'url(' + src + ')';
+                el.classList.add('bg');
+            }
+        }
+
+        if(expire){
+            if(type === 'radio' || type === 'checkbox'){
+                el.value = label;
+                el.setAttribute('type', type);
+                el.dataset.type = 'expired';
+                el.LayerPopup = this;
+            }
+            
+            if(tag === 'label'){       
+                el.setAttribute('for', id);
+            }
+        }
+
+        return el;
+    } // _createElement
+
+
+    /**
+     * 옵션에 따라 객체 속성 컨트롤
+     * @this LayerPopup
+     */
+    _setAttribute(){
         const {dim} = this.options;
         const {style, dataset} = this.wrap;
 
@@ -374,8 +397,11 @@ class LayerPopup{
         }
     }
 
-    // 레이어팝업 객체 삽입, 순서 변경되면 안됨
-    layoutAppend(){
+    /**
+     * 레이어팝업 객체 삽입하는 함수
+     * @throws 선언 순서가 변경되면 안됨
+     */
+    _layoutAppend(){
         const { appendPosition, title, dim, closeButton, button, expire, expireData} = this.options;
 
         if(title){
@@ -569,7 +595,8 @@ class LayerPopup{
         }
     } // attachEvent
 
-    // 기본 버튼 이벤트
+
+    // 기본 버튼 이벤트 @callback
     handleDefaultClick({ target }){
         const {LayerPopup} = target;
         const {options, expireWrap} = LayerPopup;

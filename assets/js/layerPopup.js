@@ -166,7 +166,7 @@
     
                 }else if(Array.isArray(customButtonData) && customButtonData.length > 1){
                     customButtonData.map(e => {
-                        let key = this.getRandomNumber();
+                        let key = this._getRandomNumber();
                         e.key = key;
     
                         let el = _createElement.call(that, { 
@@ -180,7 +180,7 @@
                     });                
     
                 }else{
-                    const key = this.getRandomNumber();
+                    const key = this._getRandomNumber();
                     let btn = (Array.isArray(customButtonData)) 
                         ? customButtonData[0] 
                         : customButtonData;
@@ -434,8 +434,8 @@
 
         this.wrap.append(this.wrapInner);
         
-        this.setContent();
-        this.attachEvent();
+        this._setContent();
+        this._attachEvent();
 
         if(appendPosition !== ''){
             let target = document.querySelector(appendPosition); 
@@ -449,8 +449,10 @@
         if(dim && this.dim) document.body.append(this.dim);
     }
 
-    // 타이틀, 콘텐츠 세팅
-    setContent(){
+    /**
+     * 레이어팝업 타이틀, 내부 콘텐츠 세팅해주는 함수
+     */
+    _setContent(){
         const {title, content} = this.options;
         let outputContent = content;
         let outputTitle = content;
@@ -473,14 +475,23 @@
             this.content.append(outputContent);
         }
 
-        // [D] \n를 <br>로 변환
+        /**
+         *  \n를 <br>로 변환
+         * @param {string} text 줄바꿈 치환이 필요한 텍스트
+         * @param {string} org 기존 치환 문구
+         * @param {string} dest 치환되어야할 문구
+         * @return {string} (default) js 줄바꿈을 html 줄바꿈으로 치환한 텍스트
+         */
         function wordBreak(text, org = '\n', dest = '<br>'){
             return text.split(org).join(dest);
         }
     }
 
-    // 이벤트 바인딩
-    attachEvent(){
+    /**
+     * 레이어 팝업 객체 이벤트 바인딩하는 함수
+     * @this LayerPopup
+     */
+    _attachEvent(){
         const that = this;
         const {closeButton, customButton, button, customButtonData, expire, expireData} = this.options;
 
@@ -508,7 +519,7 @@
     
                             }else{
                                 console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
-                                e.event = that.handleDefaultClick;
+                                e.event = that._handleDefaultClick;
                             }
                         });
                     });
@@ -523,7 +534,7 @@
     
                     if(!event || typeof event !== 'function' || event === ''){
                         console.log('event가 비어있습니다. 기본이벤트로 대체합니다.');
-                        event = this.handleDefaultClick;
+                        event = this._handleDefaultClick;
                     }
 
                     button.event = event;
@@ -570,7 +581,7 @@
                 Array.from(expireBox[0].childNodes).map((el) => {
                     el.addEventListener('click', ({target}) => {
                         if(target.tagName.toLowerCase() === 'input'){
-                            that.handleExpire(target.value);
+                            that._handleExpire(target.value);
                             that.close();
                         }
                         
@@ -580,7 +591,10 @@
             }
         }
 
-        // 기본 버튼 이벤트 호출러
+        /**
+         * 기본 버튼 이벤트 호출러
+         * @this target
+         */
         function defaultButtonCaller(){
             const that = this;
 
@@ -588,16 +602,18 @@
                 const buttons = this.buttonsWrap.childNodes;
 
                 Array.from(buttons).map(el => {
-                    el.addEventListener('click', that.handleDefaultClick);
-                    el.event = that.handleDefaultClick;
+                    el.addEventListener('click', that._handleDefaultClick);
+                    el.event = that._handleDefaultClick;
                 });
             }
         }
-    } // attachEvent
+    } // _attachEvent
 
-
-    // 기본 버튼 이벤트 @callback
-    handleDefaultClick({ target }){
+    /**
+     * 레이어팝입이 제공하는 기본 버튼에 대한 이벤트
+     * @param {MouseEvent} e.target 클릭한 버튼
+     */
+    _handleDefaultClick({ target }){
         const {LayerPopup} = target;
         const {options, expireWrap} = LayerPopup;
         const {button, expire, expireData} = options;
@@ -616,7 +632,7 @@
                     Array.from(childNodes).map(e => {
                         if(e.tagName.toLowerCase() === 'input'){
                             if(e.checked && result){
-                                LayerPopup.handleExpire(e.value);
+                                LayerPopup._handleExpire(e.value);
                             }
                         }
                     });
@@ -627,16 +643,24 @@
         LayerPopup.close();
     }
 
-    // 만료일 설정
-    handleExpire(day){        
+    /**
+     * 닫기 후 만료일 설정
+     * @this LayerPopup
+     * @param {string|number} day 만료 날짜
+     */
+    _handleExpire(day){        
         const { className } = this.options;
-        let randomNumber = this.getRandomNumber();
+        let randomNumber = this._getRandomNumber();
         
         this.uniqueName = className + randomNumber;
-        this.setCookie(this.uniqueName, day);
+        this._setCookie(this.uniqueName, day);
     }
 
-    getRandomNumber(){
+    /**
+     * 랜덤 번호 추출
+     * @return 랜덤 숫자 값
+     */
+    _getRandomNumber(){
         let num = new Date().getMinutes();
 
         let i = 0;
@@ -647,30 +671,51 @@
         return num;
     }
 
-    // 쿠키 세팅
-    setCookie(value, days){
+    /**
+     * 쿠키 세팅
+     * @param {string} value 쿠키 저장할 value
+     * @param {string | number} days 쿠키 저장 날짜
+     * @example
+     * this._setCookie('레이어팝업123', 7);
+     */
+    _setCookie(value, days){
         const date = new Date();
 
         date.setDate(date.getDate() + Number(days));
         document.cookie = this.uniqueName + "=" + escape(value) + "; path=/; expires=" + date.toUTCString() + ";"
     }
 
-    // 쿠키 가져오기
-    getCookie(name){
+    /**
+     * 저장한 쿠키 가져오기
+     * @param {string} name 쿠키 이름 
+     * @return 쿠키 값
+     * @throws 쿠키 값이 없으면 null 리턴
+     * @example
+     * this._getCookie('레이어팝업123')
+     */
+    _getCookie(name){
         const value = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
         return value ? value[2] : null;
     }
 
-    // 팝업 열기
+    /**
+     * 레이어팝업 오픈, 외부 접근자 함수
+     * @this LayerPopup
+     * @example
+     * const defaultPopup = new LayerPopup();
+     * target.addEventListener('click', () => {
+     *      defaultPopup.open();
+     * });
+     */
     open(){
-        if(this.uniqueName && this.getCookie(this.uniqueName)){
+        if(this.uniqueName && this._getCookie(this.uniqueName)){
             console.log(this.uniqueName,'로 쿠키 적용 중입니다.');
 
         }else{
             const {dim, scroll} = this.options; 
 
             if(!scroll){
-                this.setBodyScroll(false);
+                this._setBodyScroll(false);
             }
 
             setZindex.call(this);
@@ -681,7 +726,10 @@
             
             this.wrap.classList.add('on');
 
-            // zindex 설정
+            /**
+             * zindex 설정
+             * @throws 기존에 열려있는 팝업이 있으면 값 조정 [기존 zindex + 오픈된 레이어팝업 갯수]
+             */
             function setZindex(){
                 const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
 
@@ -694,17 +742,21 @@
         }
     }
 
-    // 팝업 닫기
+    /**
+     * 팝업 닫기, 외부 접근자 함수
+     * @this LayerPopup
+     * @param {boolean} isExpireState 만료일 설정이 되었으면 true, 아니면 false
+     */
     close(isExpireState){
         const {expireWrap} = this;
         const {dim, scroll, expire, expireData} = this.options;
 
         if(!scroll){
-            this.setBodyScroll(true);
+            this._setBodyScroll(true);
         }
 
         this.wrap.style.zIndex = 1000;
-        this.wrap.classList.remove('on');
+        this.wrap.classList._remove('on');
 
         if(dim && this.dim) {
             const layer = document.querySelectorAll('[data-type="layerPopup"]');
@@ -718,14 +770,18 @@
             });
 
             if(layer.length === i){
-                this.dim.classList.remove('on');
+                this.dim.classList._remove('on');
             }
         }
 
         if(expire && expireData){
-            resetChecked(this);
+            _resetChecked(this);
 
-            function resetChecked(LayerPopup){
+            /**
+             * 체크박스 리셋상태로 전환
+             * @param {object} LayerPopup 레이어팝업 객체
+             */
+            function _resetChecked(LayerPopup){
                 const child = expireWrap.childNodes;
                 Array.from(child).map(({childNodes}) => {
                     Array.from(childNodes).map(e => {
@@ -733,7 +789,7 @@
                             e.checked = false;
 
                             if(isExpireState){
-                                LayerPopup.handleExpire(e.value);
+                                LayerPopup._handleExpire(e.value);
                             }
                         }
                     });
@@ -743,7 +799,11 @@
         }
     }
 
-    setBodyScroll(isState){
+    /**
+     * 레이어 팝업 dim 배경 스크롤 처리
+     * @param {boolean} isState 레이어팝업 dim 배경 스크롤 유무
+     */
+    _setBodyScroll(isState){
         if(isState){
             document.body.style.removeProperty('overflow');
 
@@ -752,14 +812,18 @@
         }
     }
 
-    remove(){
+    /**
+     * 레이어팝업 관련 객체들 삭제 및 이벤트 
+     * @this LayerPopup
+     */
+    _remove(){
         const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
 
         if(otherPopup){
             this.dim.remove();
         }
 
-        this.dettachEvent();
+        this._dettachEvent();
         this.wrap.remove();
 
         this.name,
@@ -781,7 +845,11 @@
         this.uniqueName = null;
     }
     
-    dettachEvent(){
+    /** 
+     * 이벤트 해제
+     * @this LayerPopup
+     */
+    _dettachEvent(){
         const buttonNodes = this.buttonsWrap.childNodes;
             
         Array.from(buttonNodes).map(el => {

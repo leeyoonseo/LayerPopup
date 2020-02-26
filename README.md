@@ -1,8 +1,14 @@
 ## LayePopup
 
 레이어팝업 생성, 삽입, 삭제 컴포넌트
+=================================
 
-##### For example 
+### 문서 업데이트
+```
+npm run jsdoc
+```
+
+### For example 
 
 ```
 const LayerPopup = new LayerPopup({

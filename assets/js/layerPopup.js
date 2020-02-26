@@ -4,26 +4,49 @@
  * @since 2019.11
  * @file 레이어팝업 플러그인
  * @copyright yoonseo.lee 2019.11
- * 
  * @see https://github.com/jsdoc/jsdoc/issues/819
  */
-
  class LayerPopup{
 
     /**
-     * 레이어팝업 생성, 삽입, 삭제, 커스텀 클래스
+     * 레이어팝업 
+     * @classdesc 생성, 삽입, 삭제, 커스텀이 가능한 레이어팝업 모듈
      * @param {object} parameters - 옵션 
-     * @param {function} callbackFunc - 기본 버튼 클릭 시 실행될 콜백함수 
+     * @param {requestCallback} callbackFunc - 기본 버튼 클릭 시 실행될 콜백함수 
      */
     constructor(parameters, callbackFunc){
         
         /**
-         * @member LayerPopup#name
-         * @prop {string} name 생성자 이름
-         * @prop {string} name 생성자 이름
-         * @prop {string} options 생성자 이름
+         * @prop {string} name 클래스 생성자 이름
          */
         this.name = "LayerPopup";        
+
+        /**
+         * @abstract
+         * @prop {object} options 클래스 옵션 오브젝트 
+         * @prop {string} options.appendPosition 팝업이 삽입될 상위 객체의 tagName or id or class
+         * @prop {string} options.className 팝업의 클래스명
+         * @prop {string} options.title 타이틀 문구 
+         * @prop {string|object} options.content 내부 콘텐츠  
+         * @prop {boolean} options.button 기본 버튼 사용여부 
+         * @prop {boolean} options.dim 딤 배경처리 사용여부
+         * @prop {boolean} options.scroll 딤 배경처리 시 스크롤 사용여부
+         * @prop {boolean} options.expire 만료일 사용여부
+         * @prop {object} options.expireData 만료일 관련 데이터 
+         * @prop {string|number} options.expireData.date 만료일 날짜 
+         * @prop {string} options.expireData.id 만료일 체크 객체 id 
+         * @prop {string} options.expireData.label 만료일 체크 label 문구
+         * @prop {boolean} options.closeButton 닫기 버튼 사용여부
+         * @prop {object} options.closeButtonData 닫기버튼 데이터 
+         * @prop {string} options.closeButtonData.src 닫기버튼 이미지 처리시 src 
+         * @prop {string} options.closeButtonData.label 닫기버튼명
+         * @prop {boolean} options.customButton 커스텀 버튼 사용여부
+         * @prop {object} options.customButtonData 커스텀 버튼 데이터 
+         * @prop {string} options.customButtonData.type 커스텀 버튼 타입 
+         * @prop {string} options.customButtonData.className 커스텀 버튼 클래스 
+         * @prop {string} options.customButtonData.label 커스텀 버튼 label
+         * @prop {string|object} options.customButtonData.event 커스텀 버튼 클릭시 커스텀 이벤트
+         */
         this.options = {
             appendPosition : 'body', 
             className : 'popup', 

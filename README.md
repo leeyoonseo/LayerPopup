@@ -3,11 +3,6 @@
 레이어팝업 생성, 삽입, 삭제 컴포넌트
 =================================
 
-### 문서 업데이트
-```
-npm run jsdoc
-```
-
 ### For example 
 
 ```
@@ -21,4 +16,13 @@ const LayerPopup = new LayerPopup({
 el.addEventListner('click', () => {
     LayerPopup.open();
 });
+```
+
+### 문서확인
+https://leeyoonseo.github.io/LayerPopup/
+
+### 문서 업데이트
+```
+npm run jsdoc
+npm run jsdoeDeploy
 ```

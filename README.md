@@ -1,6 +1,8 @@
-## initialize
+## LayePopup
 
-#### For example 
+레이어팝업 생성, 삽입, 삭제 컴포넌트
+
+##### For example 
 
 ```
 const LayerPopup = new LayerPopup({

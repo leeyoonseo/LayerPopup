@@ -1,10 +1,11 @@
+// dev 옵션 - min파일에서 디버깅
+// require('source-map-support').install();
 /**
  * @author yoonseo.lee <okayoon.lee@gmail.com>
  * @version 1.0.0
  * @since 2019.11
  * @file 레이어팝업 플러그인
  * @copyright yoonseo.lee 2019.11
- * @see https://github.com/jsdoc/jsdoc/issues/819
  */
  class LayerPopup{
 
@@ -695,6 +696,31 @@
     }
 
     /**
+     * 레이어 팝업 dim 배경 스크롤 처리
+     * @param {boolean} isState 레이어팝업 dim 배경 스크롤 유무
+     */
+    _setBodyScroll(isState){
+        if(isState){
+            document.body.style.removeProperty('overflow');
+
+        }else{
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    /** 
+     * 이벤트 해제
+     * @this LayerPopup
+     */
+    _dettachEvent(){
+        const buttonNodes = this.buttonsWrap.childNodes;
+            
+        Array.from(buttonNodes).map(el => {
+            el.removeEventListener('click', el.event);
+        });
+    }
+
+    /**
      * 쿠키 세팅
      * @param {string} value 쿠키 저장할 value
      * @param {string | number} days 쿠키 저장 날짜
@@ -779,7 +805,7 @@
         }
 
         this.wrap.style.zIndex = 1000;
-        this.wrap.classList._remove('on');
+        this.wrap.classList.remove('on');
 
         if(dim && this.dim) {
             const layer = document.querySelectorAll('[data-type="layerPopup"]');
@@ -793,7 +819,7 @@
             });
 
             if(layer.length === i){
-                this.dim.classList._remove('on');
+                this.dim.classList.remove('on');
             }
         }
 
@@ -820,26 +846,13 @@
 
             } 
         }
-    }
+    }    
 
     /**
-     * 레이어 팝업 dim 배경 스크롤 처리
-     * @param {boolean} isState 레이어팝업 dim 배경 스크롤 유무
-     */
-    _setBodyScroll(isState){
-        if(isState){
-            document.body.style.removeProperty('overflow');
-
-        }else{
-            document.body.style.overflow = 'hidden';
-        }
-    }
-
-    /**
-     * 레이어팝업 관련 객체들 삭제 및 이벤트 
+     * 레이어팝업 관련 객체들 삭제, 외부 접근자 함수
      * @this LayerPopup
      */
-    _remove(){
+    remove(){
         const otherPopup = document.querySelectorAll('[data-type="layerPopup"].on');
 
         if(otherPopup){
@@ -866,17 +879,5 @@
         this.cancel,
         this.expireWrap,
         this.uniqueName = null;
-    }
-    
-    /** 
-     * 이벤트 해제
-     * @this LayerPopup
-     */
-    _dettachEvent(){
-        const buttonNodes = this.buttonsWrap.childNodes;
-            
-        Array.from(buttonNodes).map(el => {
-            el.removeEventListener('click', el.event);
-        });
-    }
+    }  
 }

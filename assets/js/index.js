@@ -1,7 +1,11 @@
+// dev 옵션 - min파일에서 디버깅
+// require('source-map-support').install();
 /**
- * @author Lee Yoon Seo
+ * @author yoonseo.lee <okayoon.lee@gmail.com>
+ * @file 레이어팝업 example
+ * @copyright yoonseo.lee 2019.11
+ * @see layerPopup.js
  */
-
 (function(){
 
     /**

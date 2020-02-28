@@ -7,7 +7,7 @@
  * @file 레이어팝업 플러그인
  * @copyright yoonseo.lee 2019.11
  */
- class LayerPopup{
+class LayerPopup{
 
     /**
      * 레이어팝업 
@@ -119,40 +119,47 @@
         const _createElement = this._createElement;
 
         this.wrap = _createElement({
-            className : className + '_wrap'
+            className : className + '_wrap',
+            expire
         });    
 
         this.wrapInner = _createElement({
-            className : className + '_inner'
+            className : className + '_inner',
+            expire
         });           
 
         this.container = _createElement({
-            className : className + '_container'
+            className : className + '_container',
+            expire
         });        
 
         this.content = _createElement({
             tag : 'div', 
-            className : className + '_content'
+            className : className + '_content',
+            expire
         });
         
         this.dim = document.querySelector('[data-type="dim"]');
 
         if(dim && !this.dim) {
             this.dim = _createElement({
-                className : className + '_dim' 
+                className : className + '_dim',
+                expire
             });
         }
 
         if(title || closeButton){
             this.header = _createElement({
-                className : className + '_header'
+                className : className + '_header',
+                expire
             });
         }
 
         if(title) {
             this.title = _createElement({
                 tag : 'p', 
-                className : className + '_title'
+                className : className + '_title',
+                expire
             });
         }
 
@@ -165,25 +172,28 @@
                 tag : 'button',
                 className : className + '_close',
                 label : closeLabel,
-                src : closeButtonData.src
+                src : closeButtonData.src,
+                expire
             });
         }
 
         if(button || expire){
             this.buttonsWrap = _createElement({
                 tag : 'div', 
-                className : className + '_buttons_wrap'
+                className : className + '_buttons_wrap',
+                expire
             });
 
             this.footer = _createElement({
-                className : className + '_footer'
+                className : className + '_footer',
+                expire
             });
         }
 
         if(button){
             if(customButton){
                 const that = this;
-                const {customButtonData} = this.options;
+                const {customButtonData, expire} = this.options;
     
                 if(customButtonData === ''){
                     defaultButtons.call(this);
@@ -197,7 +207,8 @@
                             tag : 'button', 
                             type : e.type, 
                             className : (e.className) ? e.className : key,                         
-                            label : e.label
+                            label : e.label,
+                            expire
                         });
     
                         that.buttonsWrap.append(el);
@@ -215,7 +226,8 @@
                         tag : 'button', 
                         type : type, 
                         className : (className) ? className : key, 
-                        label : label
+                        label : label,
+                        expire
                     });
                     
                     this.buttonsWrap.append(el);
@@ -235,7 +247,8 @@
 
             this.expireWrap = _createElement.call(this,{
                 tag : 'div',
-                className : prefix + '_wrap'
+                className : prefix + '_wrap',
+                expire
             });
 
             if(Array.isArray(expireData)){
@@ -244,7 +257,8 @@
                 expireData.map(({className, id, date, label}) => {
                     expireBox = _createElement.call(that, {
                         tag : 'p', 
-                        className : prefix + '_box'
+                        className : prefix + '_box',
+                        expire
                     }); 
 
                     expireBtn = _createElement.call(that, {
@@ -253,14 +267,16 @@
                         name : prefix + '_chk', 
                         className : className, 
                         id : id,
-                        label : date
+                        label : date,
+                        expire
                     });
 
                     expireLabel = _createElement.call(that,{
                         tag : 'label',
                         label : prefix + '_label', 
                         id : id,
-                        text : label
+                        text : label,
+                        expire
                     });
 
                     expireBox.append(expireBtn, expireLabel);
@@ -270,7 +286,8 @@
             }else{
                 expireBox = _createElement.call(this, {
                     tag : 'p',
-                    className : prefix + '_box'
+                    className : prefix + '_box',
+                    expire
                 });
 
                 expireBtn = _createElement.call(this,{
@@ -278,14 +295,16 @@
                     type : 'checkbox', 
                     className : prefix + '_chk', 
                     id : expireData.id,
-                    label : expireData.date
+                    label : expireData.date,
+                    expire
                 });
 
                 expireLabel = _createElement.call(this, {
                     tag : 'label',
                     label : prefix + '_label', 
                     id : expireData.id,
-                    text : expireData.label
+                    text : expireData.label,
+                    expire
                 });
 
                 expireBox.append(expireBtn, expireLabel);
@@ -303,13 +322,15 @@
                 tag : 'button', 
                 className : className + '_button_done', 
                 type : 'submit',
-                label : 'confirm'
+                label : 'confirm',
+                expire
             });
 
             this.cancel = _createElement.call(this, {
                 tag : 'button', 
                 className : className + '_button_cancel', 
-                label : 'cancel'
+                label : 'cancel',
+                expire
             });
 
             this.buttonsWrap.append(this.done, this.cancel);
@@ -349,7 +370,8 @@
         type = 'button', 
         label = '버튼', 
         src,
-        text
+        text,
+        expire = false
     }){
 
         const el = document.createElement(tag);

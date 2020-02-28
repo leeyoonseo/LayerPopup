@@ -4,21 +4,30 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const babel = require('gulp-babel');
 
-gulp.task('concat', function () {
-    return gulp.src(['./assets/js/layerPopup.js', './assets/js/index.js'])
+const concatFunc = function(src, name){
+    return gulp.src(src)
         .pipe(sourcemaps.init())
         .pipe(babel({
             presets : ['@babel/preset-env']
         }))
         .pipe(uglify())
-        .pipe(concat('index.min.js'))
+        .pipe(concat(`${name}.min.js`))
         .pipe(sourcemaps.write('./', {sourceRoot: '../assets'}))
-
         .pipe(gulp.dest('dist'));
+};
+
+gulp.task('moduleConcat', function () {
+    return concatFunc('./assets/js/layerPopup.js', 'layerPopup');
+});
+
+// dev
+gulp.task('devConcat', function () {
+    return concatFunc('./assets/js/index.js', 'index');
 });
 
 gulp.task('watch', function(){
-    gulp.watch('./assets/js/*.js', gulp.series('concat'));
+    gulp.watch('./assets/js/layerPopup.js', gulp.series('moduleConcat'));
+    gulp.watch('./assets/js/index.js', gulp.series('devConcat'));
 });
 
-gulp.task('default', gulp.series('concat', 'watch'));
+gulp.task('default', gulp.series('moduleConcat', 'devConcat', 'watch'));
